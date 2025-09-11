@@ -1,0 +1,60 @@
+networks:
+  dev_network:
+
+services:
+  bids-dev:
+    build:
+      context: ./bids
+      dockerfile: Dockerfile
+    container_name: bids-dev
+    networks:
+      - dev_network
+    volumes:
+      - /nasdata3/BDSP:/BDSP/interfaces/working
+      - ./bids/src:/BDSP/bids_app/src
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+              device_ids: ['0']
+    command: /bin/bash
+    
+  defacing-dev:
+    build:
+      context: ./defacing
+      dockerfile: Dockerfile
+    container_name: defacing-dev
+    networks:
+      - dev_network
+    volumes:
+      - /nasdata3/BDSP:/BDSP/interfaces/working
+      - ./defacing/src:/BDSP/defacing_app/src
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+              device_ids: ['0']
+    command: /bin/bash
+    
+  canonical-dev:
+    build:
+      context: ./canonical
+      dockerfile: Dockerfile
+    container_name: canonical-dev
+    networks:
+      - dev_network
+    volumes:
+      - /nasdata3/BDSP:/BDSP/interfaces/working
+      - ./canonical/src:/BDSP/canonical_app
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+              device_ids: ['0']
+    command: /bin/bash
