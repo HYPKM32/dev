@@ -11,7 +11,8 @@ services:
       - dev_network
     volumes:
       - /nasdata3/BDSP:/BDSP/interfaces/working
-      - ./bids/src:/BDSP/bids_app/src
+      - ./bids:/BDSP/bids_app
+      - /nasdata4/parknm/bids:/BDSP/data
     deploy:
       resources:
         reservations:
@@ -19,6 +20,8 @@ services:
             - driver: nvidia
               capabilities: [gpu]
               device_ids: ['0']
+    stdin_open: true 
+    tty: true           
     command: /bin/bash
     
   defacing-dev:
@@ -38,6 +41,8 @@ services:
             - driver: nvidia
               capabilities: [gpu]
               device_ids: ['0']
+    stdin_open: true 
+    tty: true   
     command: /bin/bash
     
   canonical-dev:
@@ -57,4 +62,6 @@ services:
             - driver: nvidia
               capabilities: [gpu]
               device_ids: ['0']
+    stdin_open: true 
+    tty: true   
     command: /bin/bash

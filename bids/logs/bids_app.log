@@ -1,0 +1,142 @@
+2025-09-11 08:40:11,210 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Max Workers: 1
+2025-09-11 08:40:11,211 - INFO - Starting JSON file monitoring...
+2025-09-11 08:40:11,213 - INFO - Submitted for processing: pkm_0000.json
+2025-09-11 08:40:11,215 - INFO - Processing file: pkm_0000.json
+2025-09-11 08:40:11,219 - INFO - Moved file: pkm_0000.json to working directory
+2025-09-11 08:40:11,219 - INFO - Successfully processed: pkm_0000.json
+2025-09-11 08:42:00,632 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Max Workers: 1
+2025-09-11 08:42:00,632 - INFO - Starting JSON file monitoring...
+2025-09-11 08:42:00,634 - INFO - Submitted for processing: pkm_0000.json
+2025-09-11 08:42:00,635 - INFO - Processing file: pkm_0000.json
+2025-09-11 08:42:00,638 - INFO - Moved file: pkm_0000.json to working directory
+2025-09-11 08:42:00,638 - INFO - Successfully processed: pkm_0000.json
+2025-09-11 08:42:00,640 - INFO - Moved processed file to backup: pkm_0000.json
+2025-09-11 09:00:30,076 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Max Workers: 1
+2025-09-11 09:00:30,076 - INFO - Starting JSON file monitoring...
+2025-09-11 09:00:30,078 - INFO - Submitted for processing: pkm_0000.json
+2025-09-11 09:00:30,079 - INFO - Processing file: pkm_0000.json
+2025-09-11 09:00:30,083 - INFO - Moved file: pkm_0000.json to working directory
+2025-09-11 09:00:30,083 - INFO - Process module initialized
+2025-09-11 09:00:30,083 - INFO - Starting processing for JSON file: /BDSP/interfaces/working/pkm_0000.json
+2025-09-11 09:00:30,085 - INFO - Successfully loaded JSON config: /BDSP/interfaces/working/pkm_0000.json
+2025-09-11 09:00:30,085 - INFO - Step 0: Validating and initializing configuration
+2025-09-11 09:00:30,085 - INFO - Configuration validation and initialization completed successfully
+2025-09-11 09:00:30,086 - INFO - Step 1: Creating Medical Information System Structure
+2025-09-11 09:00:30,086 - INFO - MIS structure created at: /data/Hanyang/cna0000
+2025-09-11 09:00:30,086 - INFO - Step 2: Creating origindata path
+2025-09-11 09:00:30,086 - INFO - Origindata path created: /data/Hanyang/cna0000/origindata/pkm/1
+2025-09-11 09:00:30,087 - INFO - Step 3: Creating sourcedata path
+2025-09-11 09:00:30,087 - INFO - Sourcedata path created: /data/Hanyang/cna0000/sourcedata/pkm/1
+2025-09-11 09:00:30,087 - INFO - Step 4: Creating rawdata path
+2025-09-11 09:00:30,087 - INFO - Rawdata path created: /data/Hanyang/cna0000/rawdata/pkm/1
+2025-09-11 09:00:30,088 - INFO - Step 5: Creating thumbnail
+2025-09-11 09:00:30,088 - INFO - Thumbnail created at: /data/Hanyang/cna0000/thumbnails/pkm/1
+2025-09-11 09:00:30,088 - INFO - Step 6: Creating export json
+2025-09-11 09:00:30,088 - INFO - Export json created: /data/Hanyang/cna0000/exports/pkm_1_export.json
+2025-09-11 09:00:30,088 - INFO - Step 7: Processing flags
+2025-09-11 09:00:30,089 - INFO - Flag processing completed
+2025-09-11 09:00:30,089 - INFO - All processing steps completed successfully
+2025-09-11 09:00:30,089 - INFO - Successfully processed: pkm_0000.json
+2025-09-11 09:00:30,092 - INFO - Moved processed file to backup: pkm_0000.json
+2025-09-11 09:15:25,844 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Max Workers: 1
+2025-09-11 09:15:25,845 - INFO - Starting JSON file monitoring...
+2025-09-11 09:16:00,879 - INFO - Submitted for processing: pkm_0000.json
+2025-09-11 09:16:00,881 - INFO - Processing file: pkm_0000.json
+2025-09-11 09:16:00,884 - INFO - Moved file: pkm_0000.json to working directory
+2025-09-11 09:16:00,885 - INFO - Process module initialized
+2025-09-11 09:16:00,885 - INFO - Starting processing for JSON file: /BDSP/interfaces/working/pkm_0000.json
+2025-09-11 09:16:00,886 - INFO - Successfully loaded JSON config: /BDSP/interfaces/working/pkm_0000.json
+2025-09-11 09:16:00,887 - INFO - Step 0: Validating and initializing configuration
+2025-09-11 09:16:00,887 - INFO - Configuration validation and initialization completed successfully
+2025-09-11 09:16:00,888 - INFO - Step 1: Creating Medical Information System Structure
+2025-09-11 09:16:00,888 - INFO - MIS structure created at: /data/Hanyang/cna0000
+2025-09-11 09:16:00,888 - INFO - Step 2: Creating origindata path
+2025-09-11 09:16:00,888 - INFO - Origindata path created: /data/Hanyang/cna0000/origindata/pkm/1
+2025-09-11 09:16:00,889 - INFO - Step 3: Creating sourcedata path
+2025-09-11 09:16:00,889 - INFO - Sourcedata path created: /data/Hanyang/cna0000/sourcedata/pkm/1
+2025-09-11 09:16:00,889 - INFO - Step 4: Creating rawdata path
+2025-09-11 09:16:00,889 - INFO - Rawdata path created: /data/Hanyang/cna0000/rawdata/pkm/1
+2025-09-11 09:16:00,889 - INFO - Step 5: Creating thumbnail
+2025-09-11 09:16:00,890 - INFO - Thumbnail created at: /data/Hanyang/cna0000/thumbnails/pkm/1
+2025-09-11 09:16:00,890 - INFO - Step 6: Creating export json
+2025-09-11 09:16:00,890 - INFO - Export json created: /data/Hanyang/cna0000/exports/pkm_1_export.json
+2025-09-11 09:16:00,890 - INFO - Step 7: Processing flags
+2025-09-11 09:16:00,891 - INFO - Flag processing completed
+2025-09-11 09:16:00,891 - INFO - All processing steps completed successfully
+2025-09-11 09:16:00,891 - INFO - Successfully processed: pkm_0000.json
+2025-09-11 09:16:00,894 - INFO - Moved processed file to backup: pkm_0000.json
+2025-09-11 09:27:06,564 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Max Workers: 1
+2025-09-11 09:27:06,564 - INFO - Starting JSON file monitoring...
+2025-09-11 09:27:11,573 - INFO - Submitted for processing: pkm_0000.json
+2025-09-11 09:27:11,575 - INFO - Processing file: pkm_0000.json
+2025-09-11 09:27:11,578 - INFO - Moved file: pkm_0000.json to working directory
+2025-09-11 09:27:11,578 - INFO - Process module initialized
+2025-09-11 09:27:11,578 - INFO - Starting processing for JSON file: /BDSP/interfaces/working/pkm_0000.json
+2025-09-11 09:27:11,579 - INFO - Successfully loaded JSON config: /BDSP/interfaces/working/pkm_0000.json
+2025-09-11 09:27:11,580 - INFO - Step 0: Validating and initializing configuration
+2025-09-11 09:27:11,580 - INFO - Configuration validation and initialization completed successfully
+2025-09-11 09:38:46,611 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Upload Dir: /BDSP/interfaces/upload, Backup Dir: /BDSP/interfaces/backup, Error Dir: /BDSP/interfaces/error, Max Workers: 1
+2025-09-11 09:38:46,611 - INFO - Modality paths - DICOM: /BDSP/bids_app/src/util/modality_json/dicom, NIFTI: /BDSP/bids_app/src/util/modality_json/nifti, PARREC: /BDSP/bids_app/src/util/modality_json/parrec
+2025-09-11 09:38:46,611 - INFO - Flag paths - Base: /BDSP/interfaces/flag, Defacing: /BDSP/interfaces/flag/defacing, Canonical: /BDSP/interfaces/flag/canonical, CIVET: /BDSP/interfaces/flag/civet
+2025-09-11 09:38:46,612 - INFO - Starting JSON file monitoring...
+2025-09-11 09:38:56,626 - INFO - Submitted for processing: pkm_0000.json
+2025-09-11 09:38:56,627 - INFO - Processing file: pkm_0000.json
+2025-09-11 09:38:56,632 - INFO - Moved file: pkm_0000.json to working directory
+2025-09-11 09:38:56,632 - INFO - Process module initialized
+2025-09-11 09:38:56,632 - INFO - Starting processing for JSON file: /BDSP/interfaces/working/pkm_0000.json
+2025-09-11 09:38:56,634 - INFO - Successfully loaded JSON config: /BDSP/interfaces/working/pkm_0000.json
+2025-09-11 09:38:56,634 - INFO - Step 0: Validating and initializing configuration
+2025-09-11 09:38:56,634 - INFO - Configuration validation and initialization completed successfully
+2025-09-11 09:39:01,598 - INFO - Step 1: Creating Medical Information System Structure
+2025-09-11 09:39:01,599 - INFO - MIS structure created at: /data/Hanyang/cna0000
+2025-09-11 09:39:01,599 - INFO - Step 2: Creating origindata path
+2025-09-11 09:39:01,600 - INFO - Origindata path created: /data/Hanyang/cna0000/origindata/pkm/1
+2025-09-11 09:39:01,600 - INFO - Step 3: Creating sourcedata path
+2025-09-11 09:39:01,600 - INFO - Sourcedata path created: /data/Hanyang/cna0000/sourcedata/pkm/1
+2025-09-11 09:39:01,601 - INFO - Step 4: Creating rawdata path
+2025-09-11 09:39:01,601 - INFO - Rawdata path created: /data/Hanyang/cna0000/rawdata/pkm/1
+2025-09-11 09:39:01,601 - INFO - Step 5: Creating thumbnail
+2025-09-11 09:39:01,601 - INFO - Thumbnail created at: /data/Hanyang/cna0000/thumbnails/pkm/1
+2025-09-11 09:39:01,602 - INFO - Step 6: Creating export json
+2025-09-11 09:39:01,602 - INFO - Export json created: /data/Hanyang/cna0000/exports/pkm_1_export.json
+2025-09-11 09:39:01,602 - INFO - Step 7: Processing flags
+2025-09-11 09:39:01,602 - INFO - Flag processing completed
+2025-09-11 09:39:01,603 - INFO - All processing steps completed successfully
+2025-09-11 09:39:01,603 - INFO - Successfully processed: pkm_0000.json
+2025-09-11 09:39:01,606 - INFO - Moved processed file to backup: pkm_0000.json
+2025-09-11 09:56:17,442 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Upload Dir: /BDSP/interfaces/upload, Backup Dir: /BDSP/interfaces/backup, Error Dir: /BDSP/interfaces/error, Max Workers: 1
+2025-09-11 09:56:17,442 - INFO - Modality paths - DICOM: /BDSP/bids_app/src/util/modality_json/dicom, NIFTI: /BDSP/bids_app/src/util/modality_json/nifti, PARREC: /BDSP/bids_app/src/util/modality_json/parrec
+2025-09-11 09:56:17,442 - INFO - Flag paths - Base: /BDSP/interfaces/flag, Defacing: /BDSP/interfaces/flag/defacing, Canonical: /BDSP/interfaces/flag/canonical, CIVET: /BDSP/interfaces/flag/civet
+2025-09-11 09:56:17,442 - INFO - Starting JSON file monitoring...
+2025-09-11 09:56:27,457 - INFO - Submitted for processing: pkm_0000.json
+2025-09-11 09:56:27,458 - INFO - Processing file: pkm_0000.json
+2025-09-11 09:56:27,461 - INFO - Moved file: pkm_0000.json to working directory
+2025-09-11 09:56:27,461 - INFO - Process module initialized
+2025-09-11 09:56:27,462 - INFO - Starting processing for JSON file: /BDSP/interfaces/working/pkm_0000.json
+2025-09-11 09:56:27,462 - INFO - Global variables - Upload Dir: /BDSP/interfaces/upload, Backup Dir: /BDSP/interfaces/backup, Error Dir: /BDSP/interfaces/error
+2025-09-11 09:56:27,462 - INFO - Modality paths - DICOM: /BDSP/bids_app/src/util/modality_json/dicom, NIFTI: /BDSP/bids_app/src/util/modality_json/nifti, PARREC: /BDSP/bids_app/src/util/modality_json/parrec
+2025-09-11 09:56:27,462 - INFO - Flag paths - Flag Dir: /BDSP/interfaces/flag, Defacing: /BDSP/interfaces/flag/defacing, Canonical: /BDSP/interfaces/flag/canonical, CIVET: /BDSP/interfaces/flag/civet
+2025-09-11 09:56:27,463 - INFO - Successfully loaded JSON config: /BDSP/interfaces/working/pkm_0000.json
+2025-09-11 09:56:27,464 - INFO - Step 0: Validating and initializing configuration
+2025-09-11 09:56:27,464 - INFO - Configuration validation and initialization completed successfully
+2025-09-11 09:56:27,464 - INFO - Separating data into request, flag, and global dictionaries
+2025-09-11 09:56:27,465 - INFO - Request dictionary keys: ['user', 'systemId', 'projectCode', 'projectSeq', 'orgId', 'trialIndex', 'uploadTime', 'task', 'domain']
+2025-09-11 09:56:27,465 - INFO - Flag dictionary contains 3 entries
+2025-09-11 09:56:27,465 - INFO - Global dictionary keys: ['upload_dir', 'backup_dir', 'error_dir', 'dicom_modality', 'nifti_modality', 'parrec_modality', 'flag_dir', 'defacing_flag', 'canonical_flag', 'civet_flag']
+2025-09-11 09:56:27,465 - INFO - Step 1: Creating Medical Information System Structure
+2025-09-11 09:56:27,466 - INFO - MIS structure created at: /data/Hanyang/cna0000
+2025-09-11 09:56:27,466 - INFO - Step 2: Creating origindata path
+2025-09-11 09:56:27,466 - INFO - Origindata path created: /data/Hanyang/cna0000/origindata/pkm/1
+2025-09-11 09:56:27,466 - INFO - Step 3: Creating sourcedata path
+2025-09-11 09:56:27,467 - INFO - Sourcedata path created: /data/Hanyang/cna0000/sourcedata/pkm/1
+2025-09-11 09:56:27,467 - INFO - Step 4: Creating rawdata path
+2025-09-11 09:56:27,467 - INFO - Rawdata path created: /data/Hanyang/cna0000/rawdata/pkm/1
+2025-09-11 09:56:27,467 - INFO - Step 5: Creating thumbnail
+2025-09-11 09:56:27,468 - INFO - Thumbnail created at: /data/Hanyang/cna0000/thumbnails/pkm/1
+2025-09-11 09:56:27,468 - INFO - Step 6: Creating export json
+2025-09-11 09:56:27,468 - INFO - Export json created: /data/Hanyang/cna0000/exports/pkm_1_export.json
+2025-09-11 09:56:27,468 - INFO - Step 7: Processing flags
+2025-09-11 09:56:27,469 - INFO - Flag processing completed
+2025-09-11 09:56:27,469 - INFO - All processing steps completed successfully
+2025-09-11 09:56:27,469 - INFO - Successfully processed: pkm_0000.json
+2025-09-11 09:56:27,472 - INFO - Moved processed file to backup: pkm_0000.json

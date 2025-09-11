@@ -4,7 +4,19 @@ FROM ubuntu:22.04
 # 비대화형 모드로 설정 (패키지 설치 시 프롬프트 방지)
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN mkdir -p /BDSP/bids_app
+RUN mkdir -p /BDSP/bids_lib
+RUN mkdir -p /BDSP/interfaces/upload
+RUN mkdir -p /BDSP/interfaces/event
+RUN mkdir -p /BDSP/interfaces/working
+RUN mkdir -p /BDSP/interfaces/backup
+RUN mkdir -p /BDSP/interfaces/error
+RUN mkdir -p /BDSP/interfaces/flag/canonical/
+RUN mkdir -p /BDSP/interfaces/flag/defacing
+RUN mkdir -p /BDSP/interfaces/flag/civet/
+
 # 시스템 업데이트 및 필수 패키지 설치
+
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
@@ -13,10 +25,13 @@ RUN apt-get update && apt-get install -y \
     cmake \
     git \
     pkg-config \
+    python3 \
+    python3-pip \
+    python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # dcm2niix 최신 버전 다운로드 및 컴파일
-WORKDIR /tmp
+WORKDIR /BDSP/bids_lib
 RUN git clone https://github.com/rordenlab/dcm2niix.git && \
     cd dcm2niix && \
     mkdir build && \
@@ -26,7 +41,7 @@ RUN git clone https://github.com/rordenlab/dcm2niix.git && \
     make install
 
 # 작업 디렉토리 설정
-WORKDIR /data
+WORKDIR /BDSP/bids_app
 
 # dcm2niix가 PATH에 있는지 확인
 RUN dcm2niix -h
