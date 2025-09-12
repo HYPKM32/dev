@@ -140,3 +140,12 @@
 2025-09-11 09:56:27,469 - INFO - All processing steps completed successfully
 2025-09-11 09:56:27,469 - INFO - Successfully processed: pkm_0000.json
 2025-09-11 09:56:27,472 - INFO - Moved processed file to backup: pkm_0000.json
+2025-09-12 02:04:33,271 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Upload Dir: /BDSP/interfaces/upload, Backup Dir: /BDSP/interfaces/backup, Error Dir: /BDSP/interfaces/error, Max Workers: 1
+2025-09-12 02:04:33,271 - INFO - Modality paths - DICOM: /BDSP/bids_app/src/util/modality_json/dicom, NIFTI: /BDSP/bids_app/src/util/modality_json/nifti, PARREC: /BDSP/bids_app/src/util/modality_json/parrec
+2025-09-12 02:04:33,271 - INFO - Flag paths - Base: /BDSP/interfaces/flag, Defacing: /BDSP/interfaces/flag/defacing, Canonical: /BDSP/interfaces/flag/canonical, CIVET: /BDSP/interfaces/flag/civet
+2025-09-12 02:04:33,271 - INFO - Starting JSON file monitoring...
+2025-09-12 02:04:33,273 - INFO - Submitted for processing: pkm_0000.json
+2025-09-12 02:04:33,274 - INFO - Processing file: pkm_0000.json
+2025-09-12 02:04:33,331 - INFO - Moved file: pkm_0000.json to working directory
+2025-09-12 02:04:33,331 - ERROR - Error processing pkm_0000.json: main() got an unexpected keyword argument 'wokring_dir'
+2025-09-12 02:04:33,333 - INFO - Moved error file to error directory: pkm_0000.json

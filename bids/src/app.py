@@ -1,3 +1,4 @@
+#/BDSP/bids_app/src/app.py
 import os
 import time
 import shutil
@@ -126,13 +127,11 @@ class JSONFileMonitor:
                 upload_dir=self.upload_dir,
                 backup_dir=self.backup_dir,
                 error_dir=self.error_dir,
+                working_dir=self.working_dir,
                 dicom_modality=self.dicom_modality,
                 nifti_modality=self.nifti_modality,
                 parrec_modality=self.parrec_modality,
                 flag_dir=self.flag_dir,
-                defacing_flag=self.defacing_flag,
-                canonical_flag=self.canonical_flag,
-                civet_flag=self.civet_flag
             )
             logger.info(f"Successfully processed: {file_name}")
             

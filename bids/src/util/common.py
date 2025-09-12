@@ -29,3 +29,18 @@ def bdsp_walk(target_folder: str, output_filename: str = "bdsp_file_list.json"):
 def zero_fill(num: int) -> str:
     """정수를 두자리 zerofilling한 후 string으로 변경"""
     return f"{num:02d}"
+
+
+def bdsp_path_maker(path: str) -> bool:
+    """경로가 존재하는지 확인하고, 존재하지 않으면 폴더 생성"""
+    if os.path.exists(path):
+        print(f"경로가 이미 존재합니다: {path}")
+        return False  # 이미 존재하므로 생성하지 않음
+    else:
+        try:
+            os.makedirs(path, exist_ok=True)
+            print(f"폴더를 생성했습니다: {path}")
+            return True  # 새로 생성함
+        except OSError as e:
+            print(f"폴더 생성 중 오류 발생: {e}")
+            return False
