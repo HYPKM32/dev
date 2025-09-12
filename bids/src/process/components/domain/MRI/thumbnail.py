@@ -1,0 +1,1 @@
+#/BDSP/bids_app/src/process/components/domain/mri/mri_thumbnail.py

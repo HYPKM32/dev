@@ -149,3 +149,239 @@
 2025-09-12 02:04:33,331 - INFO - Moved file: pkm_0000.json to working directory
 2025-09-12 02:04:33,331 - ERROR - Error processing pkm_0000.json: main() got an unexpected keyword argument 'wokring_dir'
 2025-09-12 02:04:33,333 - INFO - Moved error file to error directory: pkm_0000.json
+2025-09-12 02:06:13,650 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Upload Dir: /BDSP/interfaces/upload, Backup Dir: /BDSP/interfaces/backup, Error Dir: /BDSP/interfaces/error, Max Workers: 1
+2025-09-12 02:06:13,651 - INFO - Modality paths - DICOM: /BDSP/bids_app/src/util/modality_json/dicom, NIFTI: /BDSP/bids_app/src/util/modality_json/nifti, PARREC: /BDSP/bids_app/src/util/modality_json/parrec
+2025-09-12 02:06:13,651 - INFO - Flag paths - Base: /BDSP/interfaces/flag, Defacing: /BDSP/interfaces/flag/defacing, Canonical: /BDSP/interfaces/flag/canonical, CIVET: /BDSP/interfaces/flag/civet
+2025-09-12 02:06:13,651 - INFO - Starting JSON file monitoring...
+2025-09-12 02:06:13,654 - INFO - Submitted for processing: pkm_0000.json
+2025-09-12 02:06:13,655 - INFO - Processing file: pkm_0000.json
+2025-09-12 02:06:13,659 - INFO - Moved file: pkm_0000.json to working directory
+2025-09-12 02:06:13,660 - INFO - Process module initialized
+2025-09-12 02:06:13,660 - INFO - JSON 파일 처리 시작: /BDSP/interfaces/working/pkm_0000.json
+2025-09-12 02:06:13,660 - INFO - 전역 변수 저장 완료: 9개 변수
+2025-09-12 02:06:23,310 - INFO - JSON 설정 파일 로드 성공: /BDSP/interfaces/working/pkm_0000.json
+2025-09-12 02:06:23,310 - INFO - Step 0: 설정 검증 및 초기화
+2025-09-12 02:06:23,310 - INFO - 설정 검증 및 초기화가 성공적으로 완료됨
+2025-09-12 02:06:23,311 - INFO - Step 1: Medical Information System 구조 생성
+2025-09-12 02:06:23,311 - INFO - MIS 구조 생성됨: /data/Hanyang/cna0000
+2025-09-12 02:06:23,311 - INFO - Step 2: origindata 경로 생성
+2025-09-12 02:06:23,311 - INFO - Origindata 경로 생성됨: /data/Hanyang/cna0000/origindata/pkm/1
+2025-09-12 02:06:23,312 - INFO - Step 3: sourcedata 경로 생성
+2025-09-12 02:06:23,312 - INFO - Sourcedata 경로 생성됨: /data/Hanyang/cna0000/sourcedata/pkm/1
+2025-09-12 02:06:23,312 - INFO - Step 4: rawdata 경로 생성
+2025-09-12 02:06:23,312 - INFO - Rawdata 경로 생성됨: /data/Hanyang/cna0000/rawdata/pkm/1
+2025-09-12 02:06:23,313 - INFO - Step 5: 썸네일 생성
+2025-09-12 02:06:23,313 - INFO - 썸네일 생성됨: /data/Hanyang/cna0000/thumbnails/pkm/1
+2025-09-12 02:06:23,313 - INFO - Step 6: export json 생성
+2025-09-12 02:06:23,313 - INFO - Export json 생성됨: /data/Hanyang/cna0000/exports/pkm_1_export.json
+2025-09-12 02:06:23,313 - INFO - Step 7: Flag 처리
+2025-09-12 02:06:23,314 - INFO - 처리할 활성화된 flag가 없음
+2025-09-12 02:06:23,314 - INFO - 모든 처리 단계가 성공적으로 완료됨
+2025-09-12 02:06:23,314 - INFO - Successfully processed: pkm_0000.json
+2025-09-12 02:06:23,317 - INFO - Moved processed file to backup: pkm_0000.json
+2025-09-12 08:32:40,665 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Upload Dir: /BDSP/interfaces/upload, Backup Dir: /BDSP/interfaces/backup, Error Dir: /BDSP/interfaces/error, Max Workers: 1
+2025-09-12 08:32:40,665 - INFO - Modality paths - DICOM: /BDSP/bids_app/src/util/modality_json/dicom, NIFTI: /BDSP/bids_app/src/util/modality_json/nifti, PARREC: /BDSP/bids_app/src/util/modality_json/parrec
+2025-09-12 08:32:40,665 - INFO - Flag paths - Base: /BDSP/interfaces/flag, Defacing: /BDSP/interfaces/flag/defacing, Canonical: /BDSP/interfaces/flag/canonical, CIVET: /BDSP/interfaces/flag/civet
+2025-09-12 08:32:40,665 - INFO - Starting JSON file monitoring...
+2025-09-12 08:33:35,723 - INFO - Submitted for processing: pkm_0000.json
+2025-09-12 08:33:35,724 - INFO - Processing file: pkm_0000.json
+2025-09-12 08:33:35,727 - INFO - Moved file: pkm_0000.json to working directory
+2025-09-12 08:33:35,728 - INFO - Process module initialized
+2025-09-12 08:33:35,728 - INFO - JSON 파일 처리 시작: /BDSP/interfaces/working/pkm_0000.json
+2025-09-12 08:33:35,728 - INFO - 전역 변수 저장 완료: 9개 변수
+2025-09-12 08:33:35,729 - INFO - JSON 설정 파일 로드 성공: /BDSP/interfaces/working/pkm_0000.json
+2025-09-12 08:33:35,730 - INFO - Step 0: 설정 검증 및 초기화
+2025-09-12 08:33:35,730 - INFO - 설정 검증 및 초기화가 성공적으로 완료됨
+2025-09-12 08:33:35,731 - INFO - MSS 구조 생성 시작
+2025-09-12 08:33:36,295 - INFO - 새 MSS 구조 생성: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA
+2025-09-12 08:33:36,325 - INFO - current.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/current.json
+2025-09-12 08:33:36,344 - INFO - dataset_description.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/dataset_description.json
+2025-09-12 08:33:36,346 - INFO - README.md 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/README.md
+2025-09-12 08:33:36,346 - INFO - State 폴더와 초기 파일들이 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state
+2025-09-12 08:33:36,346 - INFO - MSS 구조 처리 완료
+2025-09-12 08:33:36,346 - INFO - Successfully processed: pkm_0000.json
+2025-09-12 08:33:36,348 - INFO - Moved processed file to backup: pkm_0000.json
+2025-09-12 09:33:08,223 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Upload Dir: /BDSP/interfaces/upload, Backup Dir: /BDSP/interfaces/backup, Error Dir: /BDSP/interfaces/error, Max Workers: 1
+2025-09-12 09:33:08,224 - INFO - Modality paths - DICOM: /BDSP/bids_app/src/util/modality_json/dicom, NIFTI: /BDSP/bids_app/src/util/modality_json/nifti, PARREC: /BDSP/bids_app/src/util/modality_json/parrec
+2025-09-12 09:33:08,224 - INFO - Flag paths - Base: /BDSP/interfaces/flag, Defacing: /BDSP/interfaces/flag/defacing, Canonical: /BDSP/interfaces/flag/canonical, CIVET: /BDSP/interfaces/flag/civet
+2025-09-12 09:33:08,224 - INFO - Starting JSON file monitoring...
+2025-09-12 09:33:28,250 - INFO - Submitted for processing: pkm_0000.json
+2025-09-12 09:33:28,251 - INFO - Processing file: pkm_0000.json
+2025-09-12 09:33:28,254 - INFO - Moved file: pkm_0000.json to working directory
+2025-09-12 09:33:28,255 - INFO - Process module initialized
+2025-09-12 09:33:28,255 - INFO - JSON 파일 처리 시작: /BDSP/interfaces/working/pkm_0000.json
+2025-09-12 09:33:28,255 - INFO - 전역 변수 저장 완료: 9개 변수
+2025-09-12 09:33:28,257 - INFO - JSON 설정 파일 로드 성공: /BDSP/interfaces/working/pkm_0000.json
+2025-09-12 09:33:28,257 - INFO - Step 0: 설정 검증 및 초기화
+2025-09-12 09:33:28,259 - INFO - 설정 검증 및 초기화가 성공적으로 완료됨
+2025-09-12 09:33:28,259 - INFO - Step1: MSS 구조 생성 시작
+2025-09-12 09:33:28,632 - INFO - 새 MSS 구조 생성: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA
+2025-09-12 09:33:28,647 - INFO - current.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/current.json
+2025-09-12 09:33:28,648 - INFO - dataset_description.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/dataset_description.json
+2025-09-12 09:33:28,649 - INFO - README.md 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/README.md
+2025-09-12 09:33:28,649 - INFO - State 폴더와 초기 파일들이 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state
+2025-09-12 09:33:28,649 - INFO - MSS 구조 처리 완료
+2025-09-12 09:33:28,649 - INFO - step1_mss 경로 정보 업데이트 완료
+2025-09-12 09:33:28,650 - INFO - Step 2: Origin 경로 생성 시작
+2025-09-12 09:33:28,651 - ERROR - Step 2 origin path making 실패: 업로드 디렉토리에 이미지가 존재하지 않습니다: /BDSP/interfaces/upload/pkm/00000000
+2025-09-12 09:33:28,651 - ERROR - 처리 실패: 업로드 디렉토리에 이미지가 존재하지 않습니다: /BDSP/interfaces/upload/pkm/00000000
+2025-09-12 09:33:28,651 - ERROR - Error processing pkm_0000.json: 업로드 디렉토리에 이미지가 존재하지 않습니다: /BDSP/interfaces/upload/pkm/00000000
+2025-09-12 09:33:28,653 - INFO - Moved error file to error directory: pkm_0000.json
+2025-09-12 09:34:28,314 - INFO - Submitted for processing: pkm_00000000.json
+2025-09-12 09:34:28,314 - INFO - Processing file: pkm_00000000.json
+2025-09-12 09:34:28,318 - INFO - Moved file: pkm_00000000.json to working directory
+2025-09-12 09:34:28,318 - INFO - Process module initialized
+2025-09-12 09:34:28,319 - INFO - JSON 파일 처리 시작: /BDSP/interfaces/working/pkm_00000000.json
+2025-09-12 09:34:28,319 - INFO - 전역 변수 저장 완료: 9개 변수
+2025-09-12 09:34:28,320 - INFO - JSON 설정 파일 로드 성공: /BDSP/interfaces/working/pkm_00000000.json
+2025-09-12 09:34:28,320 - INFO - Step 0: 설정 검증 및 초기화
+2025-09-12 09:34:28,321 - INFO - 설정 검증 및 초기화가 성공적으로 완료됨
+2025-09-12 09:34:28,321 - INFO - Step1: MSS 구조 생성 시작
+2025-09-12 09:34:29,099 - INFO - 새 MSS 구조 생성: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA
+2025-09-12 09:34:29,101 - INFO - current.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/current.json
+2025-09-12 09:34:29,102 - INFO - dataset_description.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/dataset_description.json
+2025-09-12 09:34:29,103 - INFO - README.md 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/README.md
+2025-09-12 09:34:29,103 - INFO - State 폴더와 초기 파일들이 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state
+2025-09-12 09:34:29,104 - INFO - MSS 구조 처리 완료
+2025-09-12 09:34:29,104 - INFO - step1_mss 경로 정보 업데이트 완료
+2025-09-12 09:34:29,104 - INFO - Step 2: Origin 경로 생성 시작
+2025-09-12 09:34:30,773 - INFO - Step 2 origin path making 완료
+2025-09-12 09:34:30,773 - INFO - step2_origin 경로 정보 업데이트 완료
+2025-09-12 09:34:30,773 - INFO - 모든 처리 단계가 성공적으로 완료됨
+2025-09-12 09:34:30,773 - INFO - Successfully processed: pkm_00000000.json
+2025-09-12 09:34:30,775 - INFO - Moved processed file to backup: pkm_00000000.json
+2025-09-12 09:38:47,937 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Upload Dir: /BDSP/interfaces/upload, Backup Dir: /BDSP/interfaces/backup, Error Dir: /BDSP/interfaces/error, Max Workers: 1
+2025-09-12 09:38:47,938 - INFO - Modality paths - DICOM: /BDSP/bids_app/src/util/modality_json/dicom, NIFTI: /BDSP/bids_app/src/util/modality_json/nifti, PARREC: /BDSP/bids_app/src/util/modality_json/parrec
+2025-09-12 09:38:47,938 - INFO - Flag paths - Base: /BDSP/interfaces/flag, Defacing: /BDSP/interfaces/flag/defacing, Canonical: /BDSP/interfaces/flag/canonical, CIVET: /BDSP/interfaces/flag/civet
+2025-09-12 09:38:47,938 - INFO - Starting JSON file monitoring...
+2025-09-12 09:38:47,940 - INFO - Submitted for processing: pkm_00000000.json
+2025-09-12 09:38:47,941 - INFO - Processing file: pkm_00000000.json
+2025-09-12 09:38:47,943 - INFO - Moved file: pkm_00000000.json to working directory
+2025-09-12 09:38:47,943 - INFO - Process module initialized
+2025-09-12 09:38:47,944 - INFO - JSON 파일 처리 시작: /BDSP/interfaces/working/pkm_00000000.json
+2025-09-12 09:38:47,944 - INFO - 전역 변수 저장 완료: 9개 변수
+2025-09-12 09:38:47,945 - INFO - JSON 설정 파일 로드 성공: /BDSP/interfaces/working/pkm_00000000.json
+2025-09-12 09:38:47,946 - INFO - Step 0: 설정 검증 및 초기화
+2025-09-12 09:38:47,947 - INFO - 설정 검증 및 초기화가 성공적으로 완료됨
+2025-09-12 09:38:47,947 - INFO - Step1: MSS 구조 생성 시작
+2025-09-12 09:38:48,665 - INFO - 새 MSS 구조 생성: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA
+2025-09-12 09:38:48,669 - INFO - current.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/current.json
+2025-09-12 09:38:48,681 - INFO - dataset_description.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/dataset_description.json
+2025-09-12 09:38:48,681 - INFO - README.md 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/README.md
+2025-09-12 09:38:48,682 - INFO - State 폴더와 초기 파일들이 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state
+2025-09-12 09:38:48,682 - INFO - MSS 구조 처리 완료
+2025-09-12 09:38:48,682 - INFO - step1_mss 경로 정보 업데이트 완료
+2025-09-12 09:38:48,683 - INFO - Step 2: Origin 경로 생성 시작
+2025-09-12 09:38:48,684 - ERROR - zip 파일이 없습니다: /BDSP/interfaces/upload/pkm/00000000
+2025-09-12 09:38:48,685 - ERROR - Step 2 origin path making 실패: zip 파일이 없습니다: /BDSP/interfaces/upload/pkm/00000000
+2025-09-12 09:38:48,685 - ERROR - 처리 실패: zip 파일이 없습니다: /BDSP/interfaces/upload/pkm/00000000
+2025-09-12 09:38:48,685 - ERROR - Error processing pkm_00000000.json: zip 파일이 없습니다: /BDSP/interfaces/upload/pkm/00000000
+2025-09-12 09:38:48,687 - INFO - Moved error file to error directory: pkm_00000000.json
+2025-09-12 09:40:40,926 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Upload Dir: /BDSP/interfaces/upload, Backup Dir: /BDSP/interfaces/backup, Error Dir: /BDSP/interfaces/error, Max Workers: 1
+2025-09-12 09:40:40,926 - INFO - Modality paths - DICOM: /BDSP/bids_app/src/util/modality_json/dicom, NIFTI: /BDSP/bids_app/src/util/modality_json/nifti, PARREC: /BDSP/bids_app/src/util/modality_json/parrec
+2025-09-12 09:40:40,926 - INFO - Flag paths - Base: /BDSP/interfaces/flag, Defacing: /BDSP/interfaces/flag/defacing, Canonical: /BDSP/interfaces/flag/canonical, CIVET: /BDSP/interfaces/flag/civet
+2025-09-12 09:40:40,927 - INFO - Starting JSON file monitoring...
+2025-09-12 09:40:50,942 - INFO - Submitted for processing: pkm_00000000.json
+2025-09-12 09:40:50,943 - INFO - Processing file: pkm_00000000.json
+2025-09-12 09:40:50,946 - INFO - Moved file: pkm_00000000.json to working directory
+2025-09-12 09:40:50,947 - INFO - Process module initialized
+2025-09-12 09:40:50,947 - INFO - JSON 파일 처리 시작: /BDSP/interfaces/working/pkm_00000000.json
+2025-09-12 09:40:50,947 - INFO - 전역 변수 저장 완료: 9개 변수
+2025-09-12 09:40:50,948 - INFO - JSON 설정 파일 로드 성공: /BDSP/interfaces/working/pkm_00000000.json
+2025-09-12 09:40:50,949 - INFO - Step 0: 설정 검증 및 초기화
+2025-09-12 09:40:50,950 - INFO - 설정 검증 및 초기화가 성공적으로 완료됨
+2025-09-12 09:40:50,951 - INFO - Step1: MSS 구조 생성 시작
+2025-09-12 09:40:55,627 - INFO - 새 MSS 구조 생성: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA
+2025-09-12 09:40:55,631 - INFO - current.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/current.json
+2025-09-12 09:40:55,632 - INFO - dataset_description.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/dataset_description.json
+2025-09-12 09:40:55,633 - INFO - README.md 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/README.md
+2025-09-12 09:40:55,633 - INFO - State 폴더와 초기 파일들이 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state
+2025-09-12 09:40:55,633 - INFO - MSS 구조 처리 완료
+2025-09-12 09:40:55,634 - INFO - step1_mss 경로 정보 업데이트 완료
+2025-09-12 09:40:55,634 - INFO - Step 2: Origin 경로 생성 시작
+2025-09-12 09:40:57,266 - INFO - Step 2 origin path making 완료
+2025-09-12 09:40:57,266 - INFO - step2_origin 경로 정보 업데이트 완료
+2025-09-12 09:40:57,266 - INFO - 모든 처리 단계가 성공적으로 완료됨
+2025-09-12 09:40:57,266 - INFO - Successfully processed: pkm_00000000.json
+2025-09-12 09:40:57,268 - INFO - Moved processed file to backup: pkm_00000000.json
+2025-09-12 09:42:43,203 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Upload Dir: /BDSP/interfaces/upload, Backup Dir: /BDSP/interfaces/backup, Error Dir: /BDSP/interfaces/error, Max Workers: 1
+2025-09-12 09:42:43,203 - INFO - Modality paths - DICOM: /BDSP/bids_app/src/util/modality_json/dicom, NIFTI: /BDSP/bids_app/src/util/modality_json/nifti, PARREC: /BDSP/bids_app/src/util/modality_json/parrec
+2025-09-12 09:42:43,203 - INFO - Flag paths - Base: /BDSP/interfaces/flag, Defacing: /BDSP/interfaces/flag/defacing, Canonical: /BDSP/interfaces/flag/canonical, CIVET: /BDSP/interfaces/flag/civet
+2025-09-12 09:42:43,203 - INFO - Starting JSON file monitoring...
+2025-09-12 09:42:48,212 - INFO - Submitted for processing: pkm_00000000.json
+2025-09-12 09:42:48,213 - INFO - Processing file: pkm_00000000.json
+2025-09-12 09:42:48,217 - INFO - Moved file: pkm_00000000.json to working directory
+2025-09-12 09:42:48,217 - INFO - Process module initialized
+2025-09-12 09:42:48,217 - INFO - JSON 파일 처리 시작: /BDSP/interfaces/working/pkm_00000000.json
+2025-09-12 09:42:48,218 - INFO - 전역 변수 저장 완료: 9개 변수
+2025-09-12 09:42:48,219 - INFO - JSON 설정 파일 로드 성공: /BDSP/interfaces/working/pkm_00000000.json
+2025-09-12 09:42:48,220 - INFO - Step 0: 설정 검증 및 초기화
+2025-09-12 09:42:48,221 - INFO - 설정 검증 및 초기화가 성공적으로 완료됨
+2025-09-12 09:42:48,221 - INFO - Step1: MSS 구조 생성 시작
+2025-09-12 09:42:49,595 - INFO - 새 MSS 구조 생성: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA
+2025-09-12 09:42:49,598 - INFO - current.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/current.json
+2025-09-12 09:42:49,600 - INFO - dataset_description.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/dataset_description.json
+2025-09-12 09:42:49,600 - INFO - README.md 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/README.md
+2025-09-12 09:42:49,601 - INFO - State 폴더와 초기 파일들이 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state
+2025-09-12 09:42:49,601 - INFO - MSS 구조 처리 완료
+2025-09-12 09:42:49,601 - INFO - step1_mss 경로 정보 업데이트 완료
+2025-09-12 09:42:49,602 - INFO - Step 2: Origin 경로 생성 시작
+2025-09-12 09:42:51,912 - INFO - Step 2 origin path making 완료
+2025-09-12 09:42:51,912 - INFO - step2_origin 경로 정보 업데이트 완료
+2025-09-12 09:42:51,912 - INFO - 모든 처리 단계가 성공적으로 완료됨
+2025-09-12 09:42:51,912 - INFO - Successfully processed: pkm_00000000.json
+2025-09-12 09:42:51,915 - INFO - Moved processed file to backup: pkm_00000000.json
+2025-09-12 09:46:43,583 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Upload Dir: /BDSP/interfaces/upload, Backup Dir: /BDSP/interfaces/backup, Error Dir: /BDSP/interfaces/error, Max Workers: 1
+2025-09-12 09:46:43,583 - INFO - Modality paths - DICOM: /BDSP/bids_app/src/util/modality_json/dicom, NIFTI: /BDSP/bids_app/src/util/modality_json/nifti, PARREC: /BDSP/bids_app/src/util/modality_json/parrec
+2025-09-12 09:46:43,583 - INFO - Flag paths - Base: /BDSP/interfaces/flag, Defacing: /BDSP/interfaces/flag/defacing, Canonical: /BDSP/interfaces/flag/canonical, CIVET: /BDSP/interfaces/flag/civet
+2025-09-12 09:46:43,583 - INFO - Starting JSON file monitoring...
+2025-09-12 09:46:48,592 - INFO - Submitted for processing: pkm_00000000.json
+2025-09-12 09:46:48,593 - INFO - Processing file: pkm_00000000.json
+2025-09-12 09:46:48,596 - INFO - Moved file: pkm_00000000.json to working directory
+2025-09-12 09:46:48,596 - INFO - Process module initialized
+2025-09-12 09:46:48,597 - INFO - JSON 파일 처리 시작: /BDSP/interfaces/working/pkm_00000000.json
+2025-09-12 09:46:48,597 - INFO - 전역 변수 저장 완료: 9개 변수
+2025-09-12 09:46:48,598 - INFO - JSON 설정 파일 로드 성공: /BDSP/interfaces/working/pkm_00000000.json
+2025-09-12 09:46:48,599 - INFO - Step 0: 설정 검증 및 초기화
+2025-09-12 09:46:48,600 - INFO - 설정 검증 및 초기화가 성공적으로 완료됨
+2025-09-12 09:46:48,600 - INFO - Step1: MSS 구조 생성 시작
+2025-09-12 09:46:48,669 - INFO - 새 MSS 구조 생성: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA
+2025-09-12 09:46:48,687 - INFO - current.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/current.json
+2025-09-12 09:46:48,688 - INFO - dataset_description.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/dataset_description.json
+2025-09-12 09:46:48,689 - INFO - README.md 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/README.md
+2025-09-12 09:46:48,689 - INFO - State 폴더와 초기 파일들이 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state
+2025-09-12 09:46:48,690 - INFO - MSS 구조 처리 완료
+2025-09-12 09:46:48,690 - INFO - step1_mss 경로 정보 업데이트 완료
+2025-09-12 09:46:48,690 - INFO - Step 2: Origin 경로 생성 시작
+2025-09-12 09:46:50,588 - INFO - Step 2 origin path making 완료
+2025-09-12 09:46:50,588 - INFO - step2_origin 경로 정보 업데이트 완료
+2025-09-12 09:46:50,588 - INFO - 모든 처리 단계가 성공적으로 완료됨
+2025-09-12 09:46:50,589 - INFO - Successfully processed: pkm_00000000.json
+2025-09-12 09:46:50,590 - INFO - Moved processed file to backup: pkm_00000000.json
+2025-09-12 09:56:29,238 - INFO - Monitor initialized - Event Dir: /BDSP/interfaces/event, Working Dir: /BDSP/interfaces/working, Upload Dir: /BDSP/interfaces/upload, Backup Dir: /BDSP/interfaces/backup, Error Dir: /BDSP/interfaces/error, Max Workers: 1
+2025-09-12 09:56:29,238 - INFO - Modality paths - DICOM: /BDSP/bids_app/src/util/modality_json/dicom, NIFTI: /BDSP/bids_app/src/util/modality_json/nifti, PARREC: /BDSP/bids_app/src/util/modality_json/parrec
+2025-09-12 09:56:29,238 - INFO - Flag paths - Base: /BDSP/interfaces/flag, Defacing: /BDSP/interfaces/flag/defacing, Canonical: /BDSP/interfaces/flag/canonical, CIVET: /BDSP/interfaces/flag/civet
+2025-09-12 09:56:29,239 - INFO - Starting JSON file monitoring...
+2025-09-12 09:56:39,252 - INFO - Submitted for processing: pkm_00000000.json
+2025-09-12 09:56:39,253 - INFO - Processing file: pkm_00000000.json
+2025-09-12 09:56:39,256 - INFO - Moved file: pkm_00000000.json to working directory
+2025-09-12 09:56:39,256 - INFO - Process module initialized
+2025-09-12 09:56:39,257 - INFO - JSON 파일 처리 시작: /BDSP/interfaces/working/pkm_00000000.json
+2025-09-12 09:56:39,257 - INFO - 전역 변수 저장 완료: 9개 변수
+2025-09-12 09:56:39,258 - INFO - JSON 설정 파일 로드 성공: /BDSP/interfaces/working/pkm_00000000.json
+2025-09-12 09:56:39,259 - INFO - Step 0: 설정 검증 및 초기화
+2025-09-12 09:56:39,260 - INFO - 설정 검증 및 초기화가 성공적으로 완료됨
+2025-09-12 09:56:39,260 - INFO - Step1: MSS 구조 생성 시작
+2025-09-12 09:56:39,528 - INFO - 새 MSS 구조 생성: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA
+2025-09-12 09:56:39,541 - INFO - current.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/current.json
+2025-09-12 09:56:39,542 - INFO - dataset_description.json 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/dataset_description.json
+2025-09-12 09:56:39,543 - INFO - README.md 파일 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state/README.md
+2025-09-12 09:56:39,543 - INFO - State 폴더와 초기 파일들이 생성됨: /BDSP/interfaces/working/CNA_lab/cna0000/1/Hanyang/IMAGE/BRAIN/DATA/state
+2025-09-12 09:56:39,544 - INFO - MSS 구조 처리 완료
+2025-09-12 09:56:39,544 - INFO - step1_mss 경로 정보 업데이트 완료
+2025-09-12 09:56:39,544 - INFO - Step 2: Origin 경로 생성 시작
+2025-09-12 09:56:41,406 - INFO - Step 2 origin path making 완료
+2025-09-12 09:56:41,406 - INFO - step2_origin 경로 정보 업데이트 완료
+2025-09-12 09:56:41,407 - INFO - 모든 처리 단계가 성공적으로 완료됨
+2025-09-12 09:56:41,407 - INFO - Successfully processed: pkm_00000000.json
+2025-09-12 09:56:41,409 - INFO - Moved processed file to backup: pkm_00000000.json

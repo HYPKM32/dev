@@ -1,8 +1,9 @@
-#/BDSP/bids_app/src/process/main.py
 import json
 import logging
 import os
 from pathlib import Path
+from process.components import mss, origin, export
+from utils import common
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,17 @@ def load_json_config(json_file_path):
     except Exception as e:
         logger.error(f"JSON 설정 파일 로드 실패: {e}")
         raise
+
+def remove_whitespace_from_dict(data):
+    """딕셔너리의 모든 문자열 값에서 공백 제거 (재귀적으로 처리)"""
+    if isinstance(data, dict):
+        return {key: remove_whitespace_from_dict(value) for key, value in data.items()}
+    elif isinstance(data, list):
+        return [remove_whitespace_from_dict(item) for item in data]
+    elif isinstance(data, str):
+        return common.remove_all_whitespace(data)
+    else:
+        return data
 
 def validate_and_initialize_config(config):
     """Step 0: JSON 변수 정리 및 초기화"""
@@ -124,8 +136,11 @@ def validate_and_initialize_config(config):
             }
         }
         
+        # 모든 딕셔너리 문자열 값에서 공백 제거
+        structured_config = remove_whitespace_from_dict(structured_config)
+        
         logger.info("설정 검증 및 초기화가 성공적으로 완료됨")
-        print("모든 설정 변수가 검증 및 초기화됨")
+        print("모든 설정 변수가 검증 및 초기화됨 (공백 제거 완료)")
         
         return structured_config
         
@@ -133,90 +148,18 @@ def validate_and_initialize_config(config):
         logger.error(f"설정 검증 및 초기화 실패: {e}")
         raise
 
-def create_mis_structure(structured_config,global_vars):
-    """Step 1: Medical Information System Structure 생성"""
-    logger.info("Step 1: Medical Information System 구조 생성")
-    try:
-        request = structured_config['request']
-        globals = global_vars
-        print("로직 구성예정")
-        mis_path = f"/data/{request['orgId']}/{request['projectCode']}"
-        
-        logger.info(f"MIS 구조 생성됨: {mis_path}")
-        return mis_path
-    except Exception as e:
-        logger.error(f"MIS 구조 생성 실패: {e}")
-        raise
-
-def create_origindata_path(structured_config, base_path):
-    """Step 2: origindata path 생성"""
-    logger.info("Step 2: origindata 경로 생성")
-    try:
-        request = structured_config['request']
-        print(f"user: {request['user']}, projectSeq: {request['projectSeq']}에 대한 origindata 경로 생성")
-        origindata_path = f"{base_path}/origindata/{request['user']}/{request['projectSeq']}"
-        
-        logger.info(f"Origindata 경로 생성됨: {origindata_path}")
-        return origindata_path
-    except Exception as e:
-        logger.error(f"Origindata 경로 생성 실패: {e}")
-        raise
-
-def create_sourcedata_path(structured_config, base_path):
-    """Step 3: sourcedata path 생성"""
-    logger.info("Step 3: sourcedata 경로 생성")
-    try:
-        request = structured_config['request']
-        print(f"user: {request['user']}, projectSeq: {request['projectSeq']}에 대한 sourcedata 경로 생성")
-        sourcedata_path = f"{base_path}/sourcedata/{request['user']}/{request['projectSeq']}"
-        
-        logger.info(f"Sourcedata 경로 생성됨: {sourcedata_path}")
-        return sourcedata_path
-    except Exception as e:
-        logger.error(f"Sourcedata 경로 생성 실패: {e}")
-        raise
-
-def create_rawdata_path(structured_config, base_path):
-    """Step 4: rawdata path 생성"""
-    logger.info("Step 4: rawdata 경로 생성")
-    try:
-        request = structured_config['request']
-        print(f"user: {request['user']}, projectSeq: {request['projectSeq']}에 대한 rawdata 경로 생성")
-        rawdata_path = f"{base_path}/rawdata/{request['user']}/{request['projectSeq']}"
-        
-        logger.info(f"Rawdata 경로 생성됨: {rawdata_path}")
-        return rawdata_path
-    except Exception as e:
-        logger.error(f"Rawdata 경로 생성 실패: {e}")
-        raise
-
-def create_thumbnail(structured_config, paths):
-    """Step 5: thumbnail 생성"""
-    logger.info("Step 5: 썸네일 생성")
-    try:
-        request = structured_config['request']
-        print(f"user: {request['user']}, projectSeq: {request['projectSeq']}에 대한 썸네일 생성")
-        thumbnail_path = f"{paths['base']}/thumbnails/{request['user']}/{request['projectSeq']}"
-        
-        logger.info(f"썸네일 생성됨: {thumbnail_path}")
-        return thumbnail_path
-    except Exception as e:
-        logger.error(f"썸네일 생성 실패: {e}")
-        raise
-
-def export_json(structured_config, paths):
-    """Step 6: export json 생성"""
-    logger.info("Step 6: export json 생성")
-    try:
-        request = structured_config['request']
-        print(f"user: {request['user']}, projectSeq: {request['projectSeq']}에 대한 export json 생성")
-        export_path = f"{paths['base']}/exports/{request['user']}_{request['projectSeq']}_export.json"
-        
-        logger.info(f"Export json 생성됨: {export_path}")
-        return export_path
-    except Exception as e:
-        logger.error(f"Export json 생성 실패: {e}")
-        raise
+def update_paths_after_step(paths, step_name, **step_paths):
+    """각 스텝 완료 후 경로 정보를 업데이트"""
+    if step_name not in paths:
+        paths[step_name] = {}
+    
+    paths[step_name].update(step_paths)
+    
+    logger.info(f"{step_name} 경로 정보 업데이트 완료")
+    for key, value in step_paths.items():
+        print(f"  {key}: {value}")
+    
+    return paths
 
 def process_flags(structured_config, paths):
     """Step 7: process flag 처리 (조건부 실행)"""
@@ -283,44 +226,89 @@ def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, worki
             print(f"  {key}: {value}")
     
     try:
+        # 모든 경로 정보를 저장할 딕셔너리 초기화
+        paths = {}
+        
         # JSON 설정 로드
         config = load_json_config(json_file_path)
         
         # Step 0: 변수 정리 및 초기화
         structured_config = validate_and_initialize_config(config)
         
-        # Step 1: MIS 구조 생성
-        base_path = create_mis_structure(structured_config,global_vars)
+        # Step 1: MSS 구조 생성
+        mss_path = mss.create_mss_structure(structured_config, global_vars)
+        mss_state_path = os.path.join(mss_path, "state")
+        paths = update_paths_after_step(paths, "step1_mss", 
+                                      mss_path=mss_path,
+                                      mss_state_path=mss_state_path)
         
-        # Step 2: origin 경로 생성
-        origindata_path = create_origindata_path(structured_config, base_path)
         
-        # Step 3: source 생성
-        sourcedata_path = create_sourcedata_path(structured_config, base_path)
+        # Step 2: origin 경로 생성 (origin.py에서 처리)
+        origin_path = origin.create_origin_path(structured_config, global_vars, mss_path)
+        origin_zip_path = os.path.join(origin_path,"zip")
+        origin_unzip_path = os.path.join(origin_path,"unzip")
+        paths = update_paths_after_step(paths, "step2_origin",
+                                      origin_path=origin_path,
+                                      origin_zip_path=origin_zip_path,
+                                      origin_unzip_path=origin_unzip_path)
         
-        # Step 4: raw 경로 생성
-        rawdata_path = create_rawdata_path(structured_config, base_path)
+        # Step 3: domain에 따른 source 생성 (domain별 모듈에서 처리)
+        domain = structured_config['request']['domain'].upper()
+        logger.info(f"Step 3: Domain '{domain}'에 따른 source 처리")
         
-        # 경로 정보 저장
-        paths = {
-            'base': base_path,
-            'origindata': origindata_path,
-            'sourcedata': sourcedata_path,
-            'rawdata': rawdata_path
-        }
+        try:
+            if domain == "MRI" or domain == "DATA":
+                # MRI 또는 DATA 도메인인 경우 MRI 모듈 사용
+                from process.components.domain.MRI import source as mri_source
+                from process.components.domain.MRI import raw as mri_raw
+                from process.components.domain.MRI import thumbnail as mri_thumbnail
+                source_path = mri_source.create_source_path(structured_config, mss_path, origin_unzip_path)
+                print(f"MRI 도메인 source 처리 완료 (Domain: {domain})")
+                
+            elif domain == "CT":
+                # CT 도메인인 경우 CT 모듈 사용
+                from process.components.domain.CT import source as ct_source
+                from process.components.domain.CT import raw as ct_raw
+                from process.components.domain.CT import thumbnail as ct_thumbnail
+                print(f"CT 도메인 source 처리 완료")
+                
+            else:
+                # 지원되지 않는 도메인인 경우 에러 처리
+                logger.error(f"지원되지 않는 도메인: {domain}")
+                raise Exception(f"지원되지 않는 도메인: {domain}")
+            
+            # Step 3 완료 후 경로 정리
+            paths = update_paths_after_step(paths, "step3_source",
+                                          source_path=source_path)
+            
+        except ImportError as e:
+            logger.error(f"도메인 '{domain}' 모듈을 찾을 수 없음: {e}")
+            raise Exception(f"도메인 '{domain}' 모듈을 찾을 수 없음: {e}")
+            
+        except Exception as e:
+            logger.error(f"Step 3 - Domain '{domain}' source 처리 실패: {e}")
+            raise
         
-        # Step 5: 썸네일 생성
-        thumbnail_path = create_thumbnail(structured_config, paths)
-        paths['thumbnail'] = thumbnail_path
+       
+        # Step 6: Export JSON 생성 (export.py에서 처리)
+        #export_path = export.create_export(structured_config, paths)
         
-        # Step 6: Export JSON 생성
-        export_path = export_json(structured_config, paths)
-        paths['export'] = export_path
+        # Step 6 완료 후 경로 정리
+        #paths = update_paths_after_step(paths, "step6_export",
+        #                              export_path=export_path)
         
         # Step 7: Process flags (조건부)
-        process_flags(structured_config, paths)
+        #process_flags(structured_config, paths)
+        
+        # 최종 경로 정보 출력
+        print("\n=== 최종 경로 정보 요약 ===")
+        for step, step_paths in paths.items():
+            print(f"{step}:")
+            for path_name, path_value in step_paths.items():
+                print(f"  {path_name}: {path_value}")
         
         logger.info("모든 처리 단계가 성공적으로 완료됨")
+        return paths
         
     except Exception as e:
         logger.error(f"처리 실패: {e}")

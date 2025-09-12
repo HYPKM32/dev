@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python 디버거: 현재 파일",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "BDSP app.py 디버그",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "/BDSP/bids_app/src/app.py",
+            "console": "integratedTerminal",
+            "cwd": "/BDSP/bids_app/src",
+            "env": {
+                "PYTHONPATH": "/BDSP/bids_app/src"
+            },
+            "args": [],
+            "justMyCode": false
+        }
+    ]
+}

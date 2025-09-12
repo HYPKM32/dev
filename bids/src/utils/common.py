@@ -1,3 +1,4 @@
+#/BDSP/bids_app/src/utils/common.py
 import os
 import json
 import re
@@ -13,10 +14,16 @@ def camel2snake(name: str) -> str:
 def bdsp_walk(target_folder: str, output_filename: str = "bdsp_file_list.json"):
     """폴더를 스캔하여 파일 경로를 JSON으로 저장"""
     file_paths = []
+    index = 1
     
     for root, dirs, files in os.walk(target_folder):
         for file in files:
-            file_paths.append(os.path.join(root, file))
+            file_path = os.path.join(root, file)
+            file_paths.append({
+                "index": index,
+                "file_path": file_path
+            })
+            index += 1
     
     result = {"path": file_paths}
     
@@ -26,9 +33,12 @@ def bdsp_walk(target_folder: str, output_filename: str = "bdsp_file_list.json"):
     return result
 
 
-def zero_fill(num: int) -> str:
-    """정수를 두자리 zerofilling한 후 string으로 변경"""
-    return f"{num:02d}"
+def zero_fill(num) -> str:
+    """정수나 문자열을 두자리 zerofilling한 후 string으로 변경"""
+    try:
+        return f"{int(num):02d}"
+    except ValueError:
+        return str(num).zfill(2)  # 숫자가 아닌 문자열은 그냥 zfill 사용
 
 
 def bdsp_path_maker(path: str) -> bool:
@@ -44,3 +54,6 @@ def bdsp_path_maker(path: str) -> bool:
         except OSError as e:
             print(f"폴더 생성 중 오류 발생: {e}")
             return False
+        
+def remove_all_whitespace(text):
+    return re.sub(r'\s+', '', text)
