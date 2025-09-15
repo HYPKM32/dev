@@ -7,6 +7,50 @@ from utils import common
 
 logger = logging.getLogger(__name__)
 
+def clean_system_files(directory):
+    """
+    시스템에서 자동으로 생성되는 불필요한 파일들 제거
+    
+    Args:
+        directory: 정리할 디렉토리 경로
+    """
+    unwanted_patterns = [
+        '.DS_Store',      # macOS 폴더 설정
+        '._*',            # macOS 리소스 포크 파일
+        '__MACOSX',       # macOS zip 메타데이터 폴더
+        '.localized',     # macOS 현지화 파일
+        'Thumbs.db',      # Windows 썸네일 캐시
+        'desktop.ini',    # Windows 폴더 설정
+        '~$*',            # Office 임시 잠금 파일
+        '*.tmp'           # 임시 파일
+    ]
+    
+    removed_count = 0
+    directory_path = Path(directory)
+    
+    for pattern in unwanted_patterns:
+        try:
+            # glob으로 패턴에 맞는 파일/폴더 찾기
+            for item in directory_path.rglob(pattern):
+                try:
+                    if item.is_file():
+                        item.unlink()
+                        print(f"  불필요한 파일 제거: {item.relative_to(directory_path)}")
+                        removed_count += 1
+                    elif item.is_dir():
+                        shutil.rmtree(item)
+                        print(f"  불필요한 폴더 제거: {item.relative_to(directory_path)}")
+                        removed_count += 1
+                except Exception as e:
+                    logger.warning(f"파일 제거 실패: {item} - {e}")
+        except Exception as e:
+            logger.warning(f"패턴 '{pattern}' 검색 실패: {e}")
+    
+    if removed_count > 0:
+        print(f"총 {removed_count}개의 불필요한 파일/폴더가 제거되었습니다.")
+    else:
+        print("제거할 불필요한 파일이 없습니다.")
+
 def create_origin_path(structured_config, global_vars, mss_path):
     """
     Origin 경로 생성 및 zip 파일 처리
@@ -87,6 +131,10 @@ def create_origin_path(structured_config, global_vars, mss_path):
                 with zipfile.ZipFile(str(destination), 'r') as zip_ref:
                     zip_ref.extractall(str(unzip_folder))
                     print(f"압축 해제: {zip_file.name} -> {unzip_folder}")
+                
+                # 압축 해제 직후 불필요한 시스템 파일들 제거
+                print(f"시스템 파일 정리 중...")
+                clean_system_files(str(unzip_folder))
                 
             except zipfile.BadZipFile as e:
                 logger.error(f"손상된 zip 파일: {zip_file.name} - {e}")

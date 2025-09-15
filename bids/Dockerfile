@@ -40,6 +40,7 @@ RUN git clone https://github.com/rordenlab/dcm2niix.git && \
     make && \
     make install
 
+RUN pip3 install --no-cache-dir pydicom
 # 작업 디렉토리 설정
 WORKDIR /BDSP/bids_app
 

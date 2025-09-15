@@ -1,0 +1,51 @@
+{
+    "anat": [
+      "FLAIR",
+      "PDT2",
+      "PDw",
+      "T1w",
+      "T2starw",
+      "T2w",
+      "UNIT1",
+      "angio",
+      "inplaneT1",
+      "inplaneT2",
+      "Chimap",
+      "M0map",
+      "MTRmap",
+      "MTVmap",
+      "MTsat",
+      "MWFmap",
+      "PDmap",
+      "R1map",
+      "R2map",
+      "R2starmap",
+      "RB1map",
+      "S0map",
+      "T1map",
+      "T1rho",
+      "T2map",
+      "T2starmap",
+      "TB1map"
+    ],
+    "func": [
+      "bold",
+      "cbv",
+      "phase"
+    ],
+    "perf": [
+      "asl",
+      "m0scan",
+      "asllabeling"
+    ],
+    "fmap": [
+      "epi",
+      "fieldmap",
+      "magnitude",
+      "magnitude1",
+      "magnitude2",
+      "phase1",
+      "phase2",
+      "phasediff"
+    ]
+  }

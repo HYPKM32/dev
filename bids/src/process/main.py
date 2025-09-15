@@ -1,3 +1,4 @@
+#/BDSP/bids_app/src/process/main.py
 import json
 import logging
 import os
@@ -126,7 +127,8 @@ def validate_and_initialize_config(config):
                 'domain': config['domain'],
                 'bodyPart': config['bodyPart'],  
                 'category': config['category'],
-                'public': config['public']   
+                'public': config['public'],
+                'subjectId': config['subjectId']
             },
             'task': config['task'],
             'flag': {
@@ -252,24 +254,35 @@ def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, worki
                                       origin_zip_path=origin_zip_path,
                                       origin_unzip_path=origin_unzip_path)
         
-        # Step 3: domain에 따른 source 생성 (domain별 모듈에서 처리)
+        # Step 3,4,5: domain에 따른 source/raw/thumbnail 생성 (domain별 모듈에서 처리)
         domain = structured_config['request']['domain'].upper()
         logger.info(f"Step 3: Domain '{domain}'에 따른 source 처리")
         
         try:
             if domain == "MRI" or domain == "DATA":
                 # MRI 또는 DATA 도메인인 경우 MRI 모듈 사용
-                from process.components.domain.MRI import source as mri_source
-                from process.components.domain.MRI import raw as mri_raw
-                from process.components.domain.MRI import thumbnail as mri_thumbnail
+                from process.components.domain.mri.source import source as mri_source
+                from process.components.domain.mri.raw import raw as mri_raw
+                from process.components.domain.mri import thumbnail as mri_thumbnail
+                # source_path로 받아서 개별 변수로 저장
                 source_path = mri_source.create_source_path(structured_config, mss_path, origin_unzip_path)
+                session_path = source_path['session_path']
+                separated_path = source_path['separated_path']
+                paths = update_paths_after_step(paths, "step3_source",
+                            source_path=source_path,
+                            session_path = session_path,
+                            separated_path=separated_path)
+                
+                #raw_path = mri_raw.create_raw_path(structured_config,session_path,separated_path)
+                
+                
                 print(f"MRI 도메인 source 처리 완료 (Domain: {domain})")
                 
             elif domain == "CT":
                 # CT 도메인인 경우 CT 모듈 사용
-                from process.components.domain.CT import source as ct_source
-                from process.components.domain.CT import raw as ct_raw
-                from process.components.domain.CT import thumbnail as ct_thumbnail
+                from process.components.domain.ct import source as ct_source
+                from process.components.domain.ct import raw as ct_raw
+                from process.components.domain.ct import thumbnail as ct_thumbnail
                 print(f"CT 도메인 source 처리 완료")
                 
             else:
@@ -282,8 +295,8 @@ def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, worki
                                           source_path=source_path)
             
         except ImportError as e:
-            logger.error(f"도메인 '{domain}' 모듈을 찾을 수 없음: {e}")
-            raise Exception(f"도메인 '{domain}' 모듈을 찾을 수 없음: {e}")
+            logger.error(f"도메인 '{domain}' 모듈에서 에러: {e}")
+            raise Exception(f"도메인 '{domain}' 모듈에서 에러: {e}")
             
         except Exception as e:
             logger.error(f"Step 3 - Domain '{domain}' source 처리 실패: {e}")
