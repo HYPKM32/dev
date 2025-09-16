@@ -9,7 +9,7 @@ import process.main
 from globals import (
     EVENT_DIR, WORKING_DIR, UPLOAD_DIR, BACKUP_DIR, ERROR_DIR, 
     MAX_WORKERS, LOG_FILENAME,
-    DICOM_MODALITY, NIFTI_MODALITY, PARREC_MODALITY,
+    DICOM_MODALITY, NIFTI_MODALITY, PARREC_MODALITY, SUFFIX_MAP,
     FLAG_DIR, DEFACING_FLAG, CANONICAL_FLAG, CIVET_FLAG
 )
 
@@ -37,25 +37,24 @@ class JSONFileMonitor:
         self.backup_dir = BACKUP_DIR
         self.error_dir = ERROR_DIR
         self.max_workers = MAX_WORKERS
-        
         # Modality paths
         self.dicom_modality = DICOM_MODALITY
         self.nifti_modality = NIFTI_MODALITY
         self.parrec_modality = PARREC_MODALITY
-        
+        self.suffix_map = SUFFIX_MAP
         # Flag paths
         self.flag_dir = FLAG_DIR
         self.defacing_flag = DEFACING_FLAG
         self.canonical_flag = CANONICAL_FLAG
         self.civet_flag = CIVET_FLAG
-        
         self.executor = ThreadPoolExecutor(max_workers=self.max_workers)
         self.processed_files = set()  # 이미 처리된 파일 추적
         
         logger.info(f"Monitor initialized - Event Dir: {self.event_dir}, Working Dir: {self.working_dir}, Upload Dir: {self.upload_dir}, "
                    f"Backup Dir: {self.backup_dir}, Error Dir: {self.error_dir}, Max Workers: {self.max_workers}")
-        logger.info(f"Modality paths - DICOM: {self.dicom_modality}, NIFTI: {self.nifti_modality}, PARREC: {self.parrec_modality}")
+        logger.info(f"Modality paths - DICOM: {self.dicom_modality}, NIFTI: {self.nifti_modality}, PARREC: {self.parrec_modality}, SUFFIX_MAP: {self.suffix_map}")
         logger.info(f"Flag paths - Base: {self.flag_dir}, Defacing: {self.defacing_flag}, Canonical: {self.canonical_flag}, CIVET: {self.civet_flag}")
+    
     
     def get_json_files(self):
         """EVENT_DIR에서 JSON 파일들을 찾기"""
@@ -73,6 +72,7 @@ class JSONFileMonitor:
         
         return json_files
     
+    
     def move_file_to_working(self, json_file_path):
         """JSON 파일을 WORKING_DIR로 이동"""
         try:
@@ -84,6 +84,7 @@ class JSONFileMonitor:
         except Exception as e:
             logger.error(f"Error moving file {json_file_path}: {e}")
             return None
+    
     
     def move_file_to_error(self, file_path, error_msg):
         """처리 실패한 파일을 ERROR_DIR로 이동"""
@@ -131,6 +132,7 @@ class JSONFileMonitor:
                 dicom_modality=self.dicom_modality,
                 nifti_modality=self.nifti_modality,
                 parrec_modality=self.parrec_modality,
+                suffix_map = self.suffix_map,
                 flag_dir=self.flag_dir,
             )
             logger.info(f"Successfully processed: {file_name}")

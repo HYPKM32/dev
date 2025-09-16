@@ -28,6 +28,10 @@
       "T2starmap",
       "TB1map"
     ],
+    "dwi":[
+      "dwi",
+      "sbref"
+    ],
     "func": [
       "bold",
       "cbv",

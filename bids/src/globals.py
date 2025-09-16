@@ -1,6 +1,5 @@
 #/BDSP/bids_app/src/globals.py
 import configparser
-
 # config 파일 읽기
 config = configparser.ConfigParser()
 config.read('/BDSP/bids_app/src/config.ini')
@@ -18,6 +17,7 @@ LOG_FILENAME = config['DEFAULT']['LOG_FILENAME']
 DICOM_MODALITY = config['MODALITY']['DICOM_MODALITY']
 NIFTI_MODALITY = config['MODALITY']['NIFTI_MODALITY']
 PARREC_MODALITY = config['MODALITY']['PARREC_MODALITY']
+SUFFIX_MAP = config['MODALITY']['SUFFIX_MAP']
 
 # FLAG 섹션
 FLAG_DIR = config['FLAG']['FLAG_DIR']

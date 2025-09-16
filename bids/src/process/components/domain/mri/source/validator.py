@@ -11,6 +11,7 @@ import re
 from collections import defaultdict
 import nibabel as nib
 import numpy as np
+from typing import List, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -438,33 +439,26 @@ class DicomValidator:
         self.invalid_data_path = Path(invalid_data_path)
         self.valid_data_path = Path(valid_data_path)
 
-    def run(self) -> tuple[str, str] | None:
-        """invalid_path/valid_path 에 각각 bdsp_file_list.json 생성
-        
-        Returns:
-            tuple[str, str]: (validated_dir, set_id) or None if failed
-        """
-        # 2. JSON 읽기
+    def run(self) -> List[Tuple[str, str]] | None:
         jpath = self.invalid_data_path / "bdsp_file_list.json"
         if not jpath.exists():
             logger.error(f"{jpath} not found")
             return None
-
         try:
             data = json.loads(jpath.read_text(encoding="utf-8"))
         except Exception as e:
             logger.error(f"Failed to read {jpath}: {e}")
             return None
 
-        valid_entries = []
+        # (StudyUID, SeriesUID) -> [Path...]
+        groups: dict[tuple[str, str], list[Path]] = {}
+
         for item in data.get("path", []):
-            orig = Path(item.get("file_path", ""))
-            cur = self.invalid_data_path / orig.name
+            p = Path(item.get("file_path", ""))
+            cur = self.invalid_data_path / p.name
             if not cur.exists():
                 logger.error(f"File not found: {cur}")
-                continue  # 파일이 없어도 다른 파일들은 계속 처리
-
-            # DICOM 파일이 아니면 건너뛰기
+                continue
             try:
                 ds = pydicom.dcmread(str(cur), stop_before_pixels=True, force=True)
             except (InvalidDicomError, Exception):
@@ -475,133 +469,99 @@ class DicomValidator:
             series_uid = getattr(ds, "SeriesInstanceUID", None)
             if not study_uid or not series_uid:
                 logger.warning(f"Missing StudyUID or SeriesUID in {cur}")
-                continue  # UID가 없어도 다른 파일들은 계속 처리
-            
-            valid_entries.append((cur, study_uid, series_uid))
+                continue
 
-        if not valid_entries:
+            groups.setdefault((study_uid, series_uid), []).append(cur)
+
+        if not groups:
             logger.error("No valid DICOM files found")
             return None
 
-        # 세트 고유 폴더명 생성 (항상 해시 기반)
-        uids = [f"{s}|{r}" for _, s, r in valid_entries]
-        uids = sorted(set(uids))  # 순서 고정 + 중복 제거
-        set_id = "set_" + _sha1("|".join(uids))
+        results: List[Tuple[str, str]] = []
+        for (study_uid, series_uid), files in groups.items():
+            set_id = "set-" + _sha1(f"{study_uid}|{series_uid}")
+            target_dir = self.valid_data_path / set_id
+            target_dir.mkdir(parents=True, exist_ok=True)
 
-        target_dir = self.valid_data_path / set_id
-        target_dir.mkdir(parents=True, exist_ok=True)
+            for src in files:
+                dst = target_dir / src.name
+                try:
+                    src.rename(dst)
+                except OSError:
+                    shutil.move(str(src), str(dst))
 
-        # 유효 파일 이동 (원래 이름 유지)
-        for cur, _, _ in valid_entries:
-            tgt = target_dir / cur.name
-            try:
-                cur.rename(tgt)  # 같은 파일시스템이면 rename 사용
-            except OSError:
-                shutil.move(str(cur), str(tgt))  # 다른 파일시스템이면 move로 폴백
+            logger.info(f"[DICOM] Validation group → {target_dir} (files: {len(files)})")
+            results.append((str(target_dir), set_id))
 
-        # JSON 최신화
-        logger.info(f"Validation success → {target_dir}")
-        return str(target_dir), set_id
+        return results
 
 
 class ParrecValidator:
     def __init__(self, invalid_data_path: str | Path, valid_data_path: str | Path):
         self.invalid_data_path = Path(invalid_data_path)
         self.valid_data_path = Path(valid_data_path)
-    
-    def run(self) -> tuple[str, str] | None:
-        """PAR/REC 파일 유효성 검사
-        
-        Returns:
-            tuple[str, str]: (validated_dir, set_id) or None if failed
-        """
-        # 1. JSON 읽기
+
+    def run(self) -> List[Tuple[str, str]] | None:
         jpath = self.invalid_data_path / "bdsp_file_list.json"
         if not jpath.exists():
             logger.error(f"{jpath} not found")
             return None
-
         try:
             data = json.loads(jpath.read_text(encoding="utf-8"))
         except Exception as e:
             logger.error(f"Failed to read {jpath}: {e}")
             return None
 
-        # 2. PAR 파일들 찾기 및 유효성 검사
-        valid_entries = []
-        par_files = []
-        
-        # JSON에서 PAR 파일들 추출
+        # stem -> {'par': Path|None, 'rec': Path|None}
+        pairs: dict[str, dict[str, Path | None]] = {}
+
         for item in data.get("path", []):
-            orig = Path(item.get("file_path", ""))
-            cur = self.invalid_data_path / orig.name
-            
+            p = Path(item.get("file_path", ""))
+            cur = self.invalid_data_path / p.name
             if not cur.exists():
                 logger.error(f"File not found: {cur}")
                 continue
-                
-            if cur.suffix.lower() == '.par':
-                par_files.append(cur)
-        
-        if not par_files:
-            logger.error("No PAR files found")
-            return None
-        
-        # 3. 각 PAR 파일에 대해 유효성 검사
-        for par_file in par_files:
-            logger.info(f"Validating PAR file: {par_file.name}")
-            
-            # PAR/REC 유효성 검사 실행
-            validation_result = validate_parrec_files(str(par_file))
-            
-            if validation_result['valid']:
-                logger.info(f"✓ PAR validation passed: {par_file.name}")
-                
-                # 대응하는 REC 파일 찾기
-                rec_file = par_file.with_suffix('.rec')
-                if rec_file.exists():
-                    # PAR과 REC 파일 모두를 유효 항목에 추가
-                    valid_entries.append(par_file)
-                    valid_entries.append(rec_file)
-                    
-                    # 로그 출력
-                    for success in validation_result['success']:
-                        logger.debug(success)
-                    for warning in validation_result['warnings']:
-                        logger.warning(warning)
+
+            suf = cur.suffix.lower()
+            if suf == '.par' or suf == '.rec':
+                info = pairs.setdefault(cur.stem, {'par': None, 'rec': None})
+                if suf == '.par':
+                    info['par'] = cur
                 else:
-                    logger.error(f"Corresponding REC file not found for {par_file.name}")
-            else:
-                logger.error(f"✗ PAR validation failed: {par_file.name}")
-                for error in validation_result['errors']:
-                    logger.error(f"  - {error}")
-        
-        if not valid_entries:
+                    info['rec'] = cur
+
+        results: List[Tuple[str, str]] = []
+
+        for stem, pr in pairs.items():
+            par_file, rec_file = pr['par'], pr['rec']
+            if not par_file or not rec_file:
+                logger.error(f"Missing PAR/REC pair for stem '{stem}'")
+                continue
+
+            # 개별 페어 단위로 유효성 검사
+            res = validate_parrec_files(str(par_file))
+            if not res.get('valid'):
+                logger.error(f"✗ PAR/REC validation failed: {par_file.name} / {rec_file.name}")
+                continue
+
+            set_id = "set-" + _sha1(f"{par_file.name}|{rec_file.name}")
+            target_dir = self.valid_data_path / set_id
+            target_dir.mkdir(parents=True, exist_ok=True)
+
+            for src in (par_file, rec_file):
+                dst = target_dir / src.name
+                try:
+                    src.rename(dst)
+                except OSError:
+                    shutil.move(str(src), str(dst))
+
+            logger.info(f"[PAR/REC] Validation pair → {target_dir} ({par_file.name}, {rec_file.name})")
+            results.append((str(target_dir), set_id))
+
+        if not results:
             logger.error("No valid PAR/REC pairs found")
             return None
-        
-        # 4. 세트 ID 생성 (파일명 기반 해시)
-        file_names = sorted([f.name for f in valid_entries])
-        set_id = "set_" + _sha1("|".join(file_names))
-        
-        target_dir = self.valid_data_path / set_id
-        target_dir.mkdir(parents=True, exist_ok=True)
-        
-        # 5. 유효한 파일들 이동
-        moved_files = []
-        for file_path in valid_entries:
-            tgt = target_dir / file_path.name
-            try:
-                file_path.rename(tgt)  # 같은 파일시스템이면 rename 사용
-                moved_files.append(file_path.name)
-            except OSError:
-                shutil.move(str(file_path), str(tgt))  # 다른 파일시스템이면 move로 폴백
-                moved_files.append(file_path.name)
-        
-        logger.info(f"PAR/REC validation success → {target_dir}")
-        logger.info(f"Moved files: {', '.join(moved_files)}")
-        
-        return str(target_dir), set_id
+        return results
     
 
 
@@ -610,113 +570,67 @@ class NiftiValidator:
     def __init__(self, invalid_data_path: str | Path, valid_data_path: str | Path):
         self.invalid_data_path = Path(invalid_data_path)
         self.valid_data_path = Path(valid_data_path)
-    
-    def run(self) -> tuple[str, str] | None:
-        """NIfTI 파일 유효성 검사
-        
-        Returns:
-            tuple[str, str]: (validated_dir, set_id) or None if failed
-        """
-        # 1. JSON 읽기
+
+    def run(self) -> List[Tuple[str, str]] | None:
         jpath = self.invalid_data_path / "bdsp_file_list.json"
         if not jpath.exists():
             logger.error(f"{jpath} not found")
             return None
-
         try:
             data = json.loads(jpath.read_text(encoding="utf-8"))
         except Exception as e:
             logger.error(f"Failed to read {jpath}: {e}")
             return None
 
-        # 2. NIfTI 파일들 찾기 및 유효성 검사
-        valid_entries = []
-        nifti_files = []
-        
-        # JSON에서 NIfTI 파일들 추출 (.nii, .nii.gz 모두 지원)
+        # stem -> [Path...(.nii / .nii.gz)]
+        groups: dict[str, list[Path]] = {}
+
         for item in data.get("path", []):
-            orig = Path(item.get("file_path", ""))
-            cur = self.invalid_data_path / orig.name
-            
+            p = Path(item.get("file_path", ""))
+            cur = self.invalid_data_path / p.name
             if not cur.exists():
                 logger.error(f"File not found: {cur}")
                 continue
-                
-            # NIfTI 파일 확장자 확인 (.nii 또는 .nii.gz)
-            if cur.suffix.lower() == '.nii' or cur.name.lower().endswith('.nii.gz'):
-                nifti_files.append(cur)
-        
-        if not nifti_files:
+            name_low = cur.name.lower()
+            if cur.suffix.lower() == '.nii' or name_low.endswith('.nii.gz'):
+                groups.setdefault(cur.stem, []).append(cur)
+
+        if not groups:
             logger.error("No NIfTI files found")
             return None
-        
-        # 3. 각 NIfTI 파일에 대해 유효성 검사
-        for nifti_file in nifti_files:
-            logger.info(f"Validating NIfTI file: {nifti_file.name}")
-            
-            # NIfTI 유효성 검사 실행
-            validation_result = validate_nifti_file(str(nifti_file))
-            
-            if validation_result['valid']:
-                logger.info(f"✓ NIfTI validation passed: {nifti_file.name}")
-                valid_entries.append(nifti_file)
-                
-                # 상세 정보 로그 출력
-                info = validation_result['info']
-                logger.debug(f"  Shape: {info.get('shape')}")
-                logger.debug(f"  Data type: {info.get('data_type')}")
-                logger.debug(f"  Dimensions: {info.get('dimensions')}D")
-                
-                # 성공 메시지들 출력
-                for success in validation_result['success']:
-                    logger.debug(f"  {success}")
-                
-                # 경고 메시지들 출력
-                for warning in validation_result['warnings']:
-                    logger.warning(f"  {warning}")
-                    
-            else:
-                logger.error(f"✗ NIfTI validation failed: {nifti_file.name}")
-                for error in validation_result['errors']:
-                    logger.error(f"  - {error}")
-        
-        if not valid_entries:
-            logger.error("No valid NIfTI files found")
+
+        results: List[Tuple[str, str]] = []
+
+        for stem, files in groups.items():
+            # 파일들 전부 유효성 검사 (하나라도 invalid면 해당 그룹 skip)
+            all_valid = True
+            for nf in files:
+                vr = validate_nifti_file(str(nf))
+                if not vr.get('valid'):
+                    logger.error(f"✗ NIfTI validation failed: {nf.name}")
+                    all_valid = False
+                    break
+            if not all_valid:
+                continue
+
+            # set_id: stem 기반 (간단하고 안정적)
+            fnames = "|".join(sorted(f.name for f in files))
+            set_id = "set-" + _sha1(f"{stem}|{fnames}")
+
+            target_dir = self.valid_data_path / set_id
+            target_dir.mkdir(parents=True, exist_ok=True)
+
+            for src in files:
+                dst = target_dir / src.name
+                try:
+                    src.rename(dst)
+                except OSError:
+                    shutil.move(str(src), str(dst))
+
+            logger.info(f"[NIfTI] Validation group → {target_dir} (files: {len(files)})")
+            results.append((str(target_dir), set_id))
+
+        if not results:
+            logger.error("No valid NIfTI sets produced")
             return None
-        
-        # 4. 세트 ID 생성 (NIfTI 고유 조합)
-        unique_ids = []
-        for file_path in valid_entries:
-            img = nib.load(str(file_path))
-            
-            # NIfTI의 고유한 조합 만들기
-            shape = str(img.shape)
-            affine_str = str(img.affine.flatten()[:6])  # affine 일부만
-            data = img.get_fdata()
-            data_stats = f"{data.min():.6f}_{data.max():.6f}_{data.mean():.6f}"
-            
-            unique_id = f"{shape}|{affine_str}|{data_stats}"
-            unique_ids.append(unique_id)
-        
-        # 정렬 후 해시
-        unique_ids.sort()
-        set_id = "set_" + _sha1("|".join(unique_ids))
-        
-        target_dir = self.valid_data_path / set_id
-        target_dir.mkdir(parents=True, exist_ok=True)
-        
-        # 5. 유효한 파일들 이동
-        moved_files = []
-        for file_path in valid_entries:
-            tgt = target_dir / file_path.name
-            try:
-                file_path.rename(tgt)  # 같은 파일시스템이면 rename 사용
-                moved_files.append(file_path.name)
-            except OSError:
-                shutil.move(str(file_path), str(tgt))  # 다른 파일시스템이면 move로 폴백
-                moved_files.append(file_path.name)
-        
-        logger.info(f"NIfTI validation success → {target_dir}")
-        logger.info(f"Moved files: {', '.join(moved_files)}")
-        
-        return str(target_dir), set_id
+        return results

@@ -229,13 +229,20 @@ class NiftiSeparator(PreWork):
         if not src_path.exists():
             raise FileNotFoundError(f"원본 파일 없음: {src_path}")
 
-        ext = src_path.suffix  # 원래 확장자 유지 (.nii 또는 .nii.gz)
-        
-        # .nii.gz 파일의 경우 확장자 처리
-        if src_path.name.endswith('.nii.gz'):
+        if src_path.name.lower().endswith('.nii.gz'):
             ext = '.nii.gz'
-        
-        new_name = f"item_{work_set_id}_0001{ext}"  # NIfTI는 항상 0001로 고정
+            stem = src_path.name[:-len('.nii.gz')]
+        else:
+            ext = src_path.suffix
+            stem = src_path.stem
+
+        # suffix(모달리티) 추출: 파일명에서 마지막 '_' 뒤 토큰
+        if '_' in stem:
+            suffix = stem.rsplit('_', 1)[1]
+        else:
+            suffix = 'NIFTI'  # 기본값
+
+        new_name = f"item_{work_set_id}_{suffix}_0001{ext}"
         dst_path = work_dir / new_name
 
         try:

@@ -70,6 +70,7 @@ def create_origin_path(structured_config, global_vars, mss_path):
         request = structured_config['request']
         upload_dir = global_vars['upload_dir']
         user = request['user']
+        subject_id = request['subjectId']
         upload_time = request['uploadTime']
         
         if not user or not upload_time:
@@ -78,7 +79,7 @@ def create_origin_path(structured_config, global_vars, mss_path):
         print(f"User: {user}, UploadTime: {upload_time}")
         
         # 2. upload_dir/user/upload_time 하위의 모든 파일 찾기 및 zip 파일 체크
-        src_dir = Path(upload_dir) / user / upload_time
+        src_dir = Path(upload_dir) / user / subject_id / upload_time
         
         if not src_dir.exists():
             raise FileNotFoundError(f"업로드 디렉토리에 이미지가 존재하지 않습니다: {src_dir}")

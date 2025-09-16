@@ -5,8 +5,8 @@ import shutil
 import logging
 from pathlib import Path
 from utils import common
-from . import validation
-from . import separation
+from . import validator
+from . import separator
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +23,22 @@ _SEPARATOR_CLASS = {
     "NIFTI": "NiftiSeparator",
 }
 
+def _as_set_list(vr):
+    """
+    Validator.run() 반환값을 리스트로 정규화
+    - 기존: (validated_dir, set_id)
+    - 확장: [(validated_dir, set_id), ...]
+    """
+    if vr is None:
+        return []
+    if isinstance(vr, tuple):
+        # (validated_dir, set_id)
+        return [vr]
+    if isinstance(vr, list):
+        # [(validated_dir, set_id), ...] 보장
+        return [(str(vd), str(sid)) for (vd, sid) in vr]
+    raise TypeError(f"Unexpected validator result type: {type(vr)}")
+
 def _get_pipeline_classes(file_format: str):
     """파일 포맷에 맞는 Validator / Separator 클래스를 반환"""
     v_name = _VALIDATOR_CLASS.get(file_format)
@@ -31,8 +47,8 @@ def _get_pipeline_classes(file_format: str):
     if not v_name or not s_name:
         raise ValueError(f"지원하지 않는 파일 포맷입니다: {file_format}")
     
-    Validator = getattr(validation, v_name, None)
-    Separator = getattr(separation, s_name, None)
+    Validator = getattr(validator, v_name, None)
+    Separator = getattr(separator, s_name, None)
     
     if Validator is None or Separator is None:
         raise ImportError(f"필요 클래스 로드 실패: {v_name}, {s_name}")
@@ -161,51 +177,56 @@ def create_source_path(structured_config, mss_path, origin_unzip_path):
    
         
         # ===== 7) 포맷별 Validator/Separator 분기(클래스 기반) ==============
-        validation_check = False
-        separation_check = False
         Validator, Separator = _get_pipeline_classes(file_format)
-        
-        # 7-1) 유효성 검사 및 유효 파일 이동
+
+        # 7-1) 유효성 검사 (여러 세트 가능)
         validator = Validator(invalid_data_path, valid_data_path)
-        # 표준 인터페이스: run() -> (validated_dir:str, set_id:str) 또는 None
         vr = validator.run()
         if vr is None:
             error_msg = "유효성 검사 실패 또는 유효 파일 없음"
             logger.error(error_msg)
             raise Exception(error_msg)
-        
-        validated_dir, set_id = vr
-        
-        if not validated_dir or not Path(validated_dir).exists():
-            error_msg = "유효성 검사 실패 또는 유효 파일 없음"
-            logger.error(error_msg)
-            raise Exception(error_msg)
-        
-        # 8) valid 쪽에도 bdsp_file_list.json 생성하고 invalid쪽에도 한번더 
+
+        # 단일/다중 세트 모두 리스트로 정규화
+        vr_list = _as_set_list(vr)
+        if not vr_list:
+            raise Exception("유효성 검사 결과가 비어 있습니다.")
+
+        # 8) invalid/validated 쪽 JSON 생성
+        #    - invalid은 최신화 1회
         common.bdsp_walk(str(invalid_data_path), str(invalid_data_path / "bdsp_file_list.json"))
-        common.bdsp_walk(validated_dir, os.path.join(validated_dir, "bdsp_file_list.json"))
-      
-        
-        # 9) 분리(Separation): 포맷별 분리기 실행
-        separator = Separator(validated_dir, set_id)
-        
-        # 표준 인터페이스: run(validated_dir, set_id) -> separated_path(str) 또는 (separated_path, meta)
-        sr = separator.run(validated_dir, set_id)
-        if isinstance(sr, tuple):
-            separated_path = sr[0]
-        else:
-            separated_path = sr
-        
-        if not separated_path or not Path(separated_path).exists():
-            raise RuntimeError("분리 결과(separated_path)가 생성되지 않았습니다.")
-        
-        # ✨ JSON 업데이트: 분리 결과 경로 기준으로 스캔 (요청사항 반영)
-        common.separated_walk(str(separated_path), str(Path(separated_path) / "bdsp_file_list.json"))
-        logger.info(f"bdsp_file_list.json 생성 (separated): {Path(separated_path) / 'bdsp_file_list.json'}")
-        
+
+        # 세트별로 분리 수행
+        validated_sets = []
+        separated_paths = []
+
+        for (validated_dir, set_id) in vr_list:
+            if not validated_dir or not Path(validated_dir).exists():
+                error_msg = f"유효성 검사 디렉토리 없음: {validated_dir}"
+                logger.error(error_msg)
+                raise Exception(error_msg)
+
+            # validated_dir 쪽 JSON 생성
+            common.bdsp_walk(validated_dir, os.path.join(validated_dir, "bdsp_file_list.json"))
+
+            # 9) 분리(Separation): 세트별 실행
+            sep = Separator(validated_dir, set_id)
+            sr = sep.run(validated_dir, set_id)
+            separated_path = sr[0] if isinstance(sr, tuple) else sr
+
+            if not separated_path or not Path(separated_path).exists():
+                raise RuntimeError(f"분리 결과(separated_path) 미생성: set_id={set_id}")
+
+            # ✨ JSON 업데이트: 분리 결과 경로 기준으로 스캔
+            common.separated_walk(str(separated_path), str(Path(separated_path) / "bdsp_file_list.json"))
+            logger.info(f"[{set_id}] bdsp_file_list.json 생성 (separated): {Path(separated_path) / 'bdsp_file_list.json'}")
+
+            validated_sets.append({'validated_set_dir': str(validated_dir), 'set_id': str(set_id)})
+            separated_paths.append(str(separated_path))
+
         logger.info(f"Source 디렉토리 구조 생성 및 유효성 검사/분리 완료: {invalid_data_path} / {valid_data_path}")
-        
-        # 10) 생성된 경로 반환
+
+        # 10) 생성된 경로 반환 (하위 호환 + 멀티 세트 지원)
         source = {
             'source_path': str(source_path),
             'subject_path': str(subject_path),
@@ -213,8 +234,10 @@ def create_source_path(structured_config, mss_path, origin_unzip_path):
             'format_path': str(format_path),
             'invalid_data_path': str(invalid_data_path),
             'valid_data_path': str(valid_data_path),
-            'validated_set_dir': str(validated_dir),
-            'separated_path': str(separated_path),
+
+            # 멀티 세트 대비
+            'validated_sets': validated_sets,          
+            'separated_paths': separated_paths,        
         }
         return source
     

@@ -200,7 +200,7 @@ def process_flags(structured_config, paths):
         raise
 
 def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, working_dir=None,
-         dicom_modality=None, nifti_modality=None, parrec_modality=None,
+         dicom_modality=None, nifti_modality=None, parrec_modality=None, suffix_map=None,
          flag_dir=None):
     """JSON 파일을 처리하는 메인 함수"""
     global global_vars
@@ -217,6 +217,7 @@ def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, worki
         'dicom_modality': dicom_modality,
         'nifti_modality': nifti_modality,
         'parrec_modality': parrec_modality,
+        'suffix_map': suffix_map,
         'flag_dir': flag_dir
     }
     
@@ -259,31 +260,27 @@ def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, worki
         logger.info(f"Step 3: Domain '{domain}'에 따른 source 처리")
         
         try:
-            if domain == "MRI" or domain == "DATA":
+            if domain == "MRI" or domain == "DATA" or domain == "CT":
                 # MRI 또는 DATA 도메인인 경우 MRI 모듈 사용
                 from process.components.domain.mri.source import source as mri_source
                 from process.components.domain.mri.raw import raw as mri_raw
                 from process.components.domain.mri import thumbnail as mri_thumbnail
                 # source_path로 받아서 개별 변수로 저장
                 source_path = mri_source.create_source_path(structured_config, mss_path, origin_unzip_path)
-                session_path = source_path['session_path']
-                separated_path = source_path['separated_path']
                 paths = update_paths_after_step(paths, "step3_source",
-                            source_path=source_path,
-                            session_path = session_path,
-                            separated_path=separated_path)
+                            source_path=source_path)
                 
-                #raw_path = mri_raw.create_raw_path(structured_config,session_path,separated_path)
+                #raw_path = mri_raw.create_raw_path(structured_config,source_path,global_vars)
                 
                 
                 print(f"MRI 도메인 source 처리 완료 (Domain: {domain})")
                 
-            elif domain == "CT":
+            elif domain == "PET":
                 # CT 도메인인 경우 CT 모듈 사용
-                from process.components.domain.ct import source as ct_source
-                from process.components.domain.ct import raw as ct_raw
-                from process.components.domain.ct import thumbnail as ct_thumbnail
-                print(f"CT 도메인 source 처리 완료")
+                from process.components.domain.pet import source as pet_source
+                from process.components.domain.pet import raw as pet_raw
+                from process.components.domain.pet import thumbnail as pet_thumbnail
+                print(f"PET 도메인 source 처리 완료")
                 
             else:
                 # 지원되지 않는 도메인인 경우 에러 처리
