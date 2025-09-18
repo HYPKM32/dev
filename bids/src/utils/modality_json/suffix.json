@@ -1,55 +1,59 @@
 {
-    "anat": [
-      "FLAIR",
-      "PDT2",
-      "PDw",
-      "T1w",
-      "T2starw",
-      "T2w",
-      "UNIT1",
-      "angio",
-      "inplaneT1",
-      "inplaneT2",
-      "Chimap",
-      "M0map",
-      "MTRmap",
-      "MTVmap",
-      "MTsat",
-      "MWFmap",
-      "PDmap",
-      "R1map",
-      "R2map",
-      "R2starmap",
-      "RB1map",
-      "S0map",
-      "T1map",
-      "T1rho",
-      "T2map",
-      "T2starmap",
-      "TB1map"
-    ],
-    "dwi":[
-      "dwi",
-      "sbref"
-    ],
-    "func": [
-      "bold",
-      "cbv",
-      "phase"
-    ],
-    "perf": [
-      "asl",
-      "m0scan",
-      "asllabeling"
-    ],
-    "fmap": [
-      "epi",
-      "fieldmap",
-      "magnitude",
-      "magnitude1",
-      "magnitude2",
-      "phase1",
-      "phase2",
-      "phasediff"
-    ]
+  "anat": {
+    "FLAIR": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "PDT2": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "PDw": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "T1w": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "T2starw": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "T2w": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "UNIT1": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "angio": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "inplaneT1": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "inplaneT2": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "Chimap": {"subject": "label", "session": "label", "run": "index"},
+    "M0map": {"subject": "label", "session": "label", "run": "index"},
+    "MTRmap": {"subject": "label", "session": "label", "run": "index"},
+    "MTVmap": {"subject": "label", "session": "label", "run": "index"},
+    "MTsat": {"subject": "label", "session": "label", "run": "index"},
+    "MWFmap": {"subject": "label", "session": "label", "run": "index"},
+    "PDmap": {"subject": "label", "session": "label", "run": "index"},
+    "R1map": {"subject": "label", "session": "label", "run": "index"},
+    "R2map": {"subject": "label", "session": "label", "run": "index"},
+    "R2starmap": {"subject": "label", "session": "label", "run": "index"},
+    "RB1map": {"subject": "label", "session": "label", "run": "index"},
+    "S0map": {"subject": "label", "session": "label", "run": "index"},
+    "T1map": {"subject": "label", "session": "label", "run": "index"},
+    "T1rho": {"subject": "label", "session": "label", "run": "index"},
+    "T2map": {"subject": "label", "session": "label", "run": "index"},
+    "T2starmap": {"subject": "label", "session": "label", "run": "index"},
+    "TB1map": {"subject": "label", "session": "label", "run": "index"}
+  },
+  "dwi": {
+    "dwi": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "sbref": {"subject": "label", "session": "label", "acq": "label", "run": "index"}
+  },
+  "func": {
+    "bold": {"subject": "label", "session": "label", "task": "label", "run": "index"},
+    "cbv": {"subject": "label", "session": "label", "task": "label", "run": "index"}
+  },
+  "perf": {
+    "asl": {"subject": "label", "session": "label", "run": "index"},
+    "m0scan": {"subject": "label", "session": "label", "run": "index"},
+    "asllabeling": {"subject": "label", "session": "label", "run": "index"}
+  },
+  "fmap": {
+    "epi": {"subject": "label", "session": "label", "dir": "label", "run": "index"},
+    "fieldmap": {"subject": "label", "session": "label", "run": "index"},
+    "magnitude": {"subject": "label", "session": "label", "run": "index"},
+    "magnitude1": {"subject": "label", "session": "label", "run": "index"},
+    "magnitude2": {"subject": "label", "session": "label", "run": "index"},
+    "phase1": {"subject": "label", "session": "label", "run": "index"},
+    "phase2": {"subject": "label", "session": "label", "run": "index"},
+    "phasediff": {"subject": "label", "session": "label", "run": "index"}
+  },
+  "ct": {
+    "ct": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "cr": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "dx": {"subject": "label", "session": "label", "acq": "label", "run": "index"}
   }
+}

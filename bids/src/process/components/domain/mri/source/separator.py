@@ -2,6 +2,8 @@
 import json
 import logging
 from pathlib import Path
+import gzip
+import shutil
 
 logger = logging.getLogger(__name__)
 

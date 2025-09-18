@@ -96,3 +96,16 @@ def separated_walk(separated_path, json_output_path):
     data = {"path": entries}
     with open(json_output_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
+        
+def remove_special_chars(text: str) -> str:
+    """
+    입력된 문자열에서 알파벳, 숫자, '_', '-'를 제외한
+    모든 특수문자를 제거합니다.
+    
+    Args:
+        text (str): 입력 문자열
+    
+    Returns:
+        str: 특수문자가 제거된 문자열
+    """
+    return re.sub(r'[^a-zA-Z0-9_-]', '', text)

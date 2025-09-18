@@ -1,0 +1,30 @@
+{
+  "T1w": [
+    {
+      "Technique": [
+        "T1"
+      ]
+    }
+  ],
+  "FLAIR": [
+    {
+      "ProtocolName": [
+        "FLAIR"
+      ]
+    }
+  ],
+  "dwi": [
+    {
+      "Technique": [
+        "Dwi"
+      ]
+    }
+  ],
+  "bold": [
+    {
+      "ProtocolName": [
+        "fMRI_REST_165"
+      ]
+    }
+  ]
+}

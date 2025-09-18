@@ -264,15 +264,13 @@ def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, worki
                 # MRI 또는 DATA 도메인인 경우 MRI 모듈 사용
                 from process.components.domain.mri.source import source as mri_source
                 from process.components.domain.mri.raw import raw as mri_raw
-                from process.components.domain.mri import thumbnail as mri_thumbnail
+                from process.components.domain.mri.post import thumbnail as mri_thumbnail
                 # source_path로 받아서 개별 변수로 저장
                 source_path = mri_source.create_source_path(structured_config, mss_path, origin_unzip_path)
                 paths = update_paths_after_step(paths, "step3_source",
                             source_path=source_path)
                 
-                #raw_path = mri_raw.create_raw_path(structured_config,source_path,global_vars)
-                
-                
+                raw_path = mri_raw.create_raw_path(structured_config,source_path,global_vars)
                 print(f"MRI 도메인 source 처리 완료 (Domain: {domain})")
                 
             elif domain == "PET":
