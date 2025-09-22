@@ -270,7 +270,15 @@ def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, worki
                 paths = update_paths_after_step(paths, "step3_source",
                             source_path=source_path)
                 
+                logger.info(f"Step 4: Domain '{domain}'에 따른 raw 처리")
                 raw_path = mri_raw.create_raw_path(structured_config,source_path,global_vars)
+                paths = update_paths_after_step(paths,"step4_raw",
+                            raw_path=raw_path)
+                
+                logger.info(f"Step 5-1: Domain '{domain}' 후처리: Thumbnail 생성")
+                thumbnail_path = mri_thumbnail.thumbnail(raw_path)
+                paths = update_paths_after_step(paths, "step5_thumbnail",
+                            thumbnail_path=thumbnail_path)
                 print(f"MRI 도메인 source 처리 완료 (Domain: {domain})")
                 
             elif domain == "PET":
@@ -285,16 +293,12 @@ def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, worki
                 logger.error(f"지원되지 않는 도메인: {domain}")
                 raise Exception(f"지원되지 않는 도메인: {domain}")
             
-            # Step 3 완료 후 경로 정리
-            paths = update_paths_after_step(paths, "step3_source",
-                                          source_path=source_path)
-            
         except ImportError as e:
             logger.error(f"도메인 '{domain}' 모듈에서 에러: {e}")
             raise Exception(f"도메인 '{domain}' 모듈에서 에러: {e}")
             
         except Exception as e:
-            logger.error(f"Step 3 - Domain '{domain}' source 처리 실패: {e}")
+            logger.error(f"Domain '{domain}'처리 실패: {e}")
             raise
         
        

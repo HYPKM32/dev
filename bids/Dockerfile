@@ -16,7 +16,6 @@ RUN mkdir -p /BDSP/interfaces/flag/defacing
 RUN mkdir -p /BDSP/interfaces/flag/civet/
 
 # 시스템 업데이트 및 필수 패키지 설치
-
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
@@ -28,6 +27,8 @@ RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3-dev \
+    libgl1 \
+    libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 # dcm2niix 최신 버전 다운로드 및 컴파일
@@ -40,7 +41,9 @@ RUN git clone https://github.com/rordenlab/dcm2niix.git && \
     make && \
     make install
 
-RUN pip3 install --no-cache-dir pydicom
+# Python 패키지 설치
+RUN pip3 install --no-cache-dir pydicom opencv-python
+
 # 작업 디렉토리 설정
 WORKDIR /BDSP/bids_app
 

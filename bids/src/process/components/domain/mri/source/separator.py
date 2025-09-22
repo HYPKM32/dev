@@ -77,25 +77,6 @@ class DicomSeparator(PreWork):
 
 
 class ParrecSeparator(PreWork):
-    def _get_parrec_number(self, file_path: Path) -> str:
-        """PAR/REC 파일 타입에 따라 번호 할당
-        
-        Args:
-            file_path: 파일 경로
-            
-        Returns:
-            str: PAR 파일이면 "01", REC 파일이면 "02"
-        """
-        ext = file_path.suffix.lower()
-        if ext == '.par':
-            return "0001"
-        elif ext == '.rec':
-            return "0002"
-        else:
-            # 기본값으로 파일 확장자 기반 처리
-            logger.warning(f"알 수 없는 확장자: {ext}")
-            return "0000"
-    
     def run(self, validated_dir: str = None, set_id: str = None) -> str:
         """PAR/REC 파일 분리
         
@@ -145,17 +126,16 @@ class ParrecSeparator(PreWork):
                 elif ext == '.rec':
                     parrec_pairs[base_name]['rec'] = src_path
 
-        # PAR/REC 쌍별로 파일명 변경
+        # PAR/REC 쌍별로 파일명 변경 (둘 다 0001 사용)
         renamed_count = 0
         for base_name, pair_info in parrec_pairs.items():
             par_path = pair_info['par']
             rec_path = pair_info['rec']
             base_index = pair_info['index']
             
-            # PAR 파일 처리
+            # PAR 파일 처리 - 0001 사용
             if par_path and par_path.exists():
-                par_number = self._get_parrec_number(par_path)
-                new_par_name = f"item_{work_set_id}_{par_number}.par"
+                new_par_name = f"item_{work_set_id}_0001.par"
                 dst_par_path = work_dir / new_par_name
                 
                 try:
@@ -165,10 +145,9 @@ class ParrecSeparator(PreWork):
                 except Exception as e:
                     logger.error(f"PAR 파일 이동 실패: {par_path} → {dst_par_path} ({e})")
             
-            # REC 파일 처리
+            # REC 파일 처리 - 0001 사용
             if rec_path and rec_path.exists():
-                rec_number = self._get_parrec_number(rec_path)
-                new_rec_name = f"item_{work_set_id}_{rec_number}.rec"
+                new_rec_name = f"item_{work_set_id}_0001.rec"
                 dst_rec_path = work_dir / new_rec_name
                 
                 try:
@@ -180,6 +159,7 @@ class ParrecSeparator(PreWork):
         
         logger.info(f"PAR/REC 분리 완료: {work_dir} ({renamed_count}개 파일 처리)")
         return str(work_dir)
+
 
 
 class NiftiSeparator(PreWork):

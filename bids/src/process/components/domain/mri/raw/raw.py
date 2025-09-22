@@ -3,8 +3,7 @@ import logging
 import os
 from . import modality_mapper as mapper
 from . import name_builder as builder
-from . import bids_checker as checker
-from . import dcm2nii_processor as processor
+from . import dcm2nii_parser as parser
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +43,16 @@ def create_raw_path(structured_config, source_path, global_vars):
             raw_path
         )
         print("BIDS mapping:", bids_mapping)
-        return bids_mapping
+        
+        # 5. BIDS 변환 처리
+        try:
+            src2raw_map = parser.process_bids_conversion(bids_mapping)
+            logger.info("BIDS conversion completed successfully")
+        except Exception as e:
+            logger.error(f"Failed to process BIDS conversion: {e}")
+            raise
+        
+        return src2raw_map
         
     except Exception as e:
         logger.error(f"Failed to create BIDS mapping: {e}")

@@ -2,7 +2,10 @@
 import os
 import json
 import re
+import shutil
+import gzip
 from pathlib import Path
+
 
 
 def camel2snake(name: str) -> str:
@@ -15,9 +18,14 @@ def camel2snake(name: str) -> str:
 import os
 import json
 
-def bdsp_walk(target_folder: str, output_filename: str = "bdsp_file_list.json"):
+def bdsp_walk(target_folder: str, output_filename: str = None):
     """폴더를 스캔하여 파일 경로를 JSON으로 저장
        단, 'bdsp'로 시작하고 '.json' 확장자인 파일은 제외"""
+    
+    # output_filename이 None이면 target_folder 안에 기본 파일명으로 생성
+    if output_filename is None:
+        output_filename = os.path.join(target_folder, "bdsp_file_list.json")
+    
     file_paths = []
     index = 1
     
@@ -40,7 +48,6 @@ def bdsp_walk(target_folder: str, output_filename: str = "bdsp_file_list.json"):
         json.dump(result, f, indent=2, ensure_ascii=False)
     
     return result
-
 
 
 def zero_fill(num) -> str:
@@ -109,3 +116,31 @@ def remove_special_chars(text: str) -> str:
         str: 특수문자가 제거된 문자열
     """
     return re.sub(r'[^a-zA-Z0-9_-]', '', text)
+
+
+def compress_nii_gz(nii_path: str) -> str:
+    """
+    .nii 파일을 gzip으로 압축하여 .nii.gz로 저장한 뒤 원본 .nii는 삭제
+    
+    Args:
+        nii_path (str): 입력 .nii 파일 경로
+    
+    Returns:
+        str: 압축된 .nii.gz 파일 경로
+    """
+    nii_file = Path(nii_path)
+    if not nii_file.exists():
+        raise FileNotFoundError(f"파일이 존재하지 않습니다: {nii_file}")
+    if nii_file.suffix != ".nii":
+        raise ValueError("입력 파일은 반드시 .nii 확장자여야 합니다.")
+    
+    gz_file = nii_file.with_suffix(".nii.gz")
+    
+    # gzip 압축
+    with open(nii_file, 'rb') as f_in, gzip.open(gz_file, 'wb') as f_out:
+        shutil.copyfileobj(f_in, f_out)
+    
+    # 원본 파일 삭제
+    nii_file.unlink()
+    
+    return str(gz_file)
