@@ -1,4 +1,3 @@
-#/BDSP/bids_app/src/process/components/domain/mri/source/validation.py
 import json
 import hashlib
 import logging
@@ -22,290 +21,60 @@ def _sha1(s: str) -> str:
 
 def validate_parrec_files(par_path):
     """
-    PAR/REC 파일 유효성 검사 함수
+    PAR/REC 파일 최소 유효성 검사
     
     Args:
         par_path (str): PAR 파일 경로
     
     Returns:
-        dict: 검사 결과
+        bool: 유효성 여부 (True/False)
     """
-    results = {
-        'valid': True,
-        'errors': [],
-        'warnings': [],
-        'success': [],
-        'info': {}
-    }
-    
     # REC 파일 경로 생성
     rec_path = par_path.replace('.par', '.rec')
     
     try:
         # 1. 파일 존재 확인
         if not os.path.exists(par_path):
-            results['errors'].append(f"PAR 파일이 존재하지 않음: {par_path}")
-            results['valid'] = False
-            return results
-        else:
-            results['success'].append("✓ PAR 파일 존재 확인")
+            return False
             
         if not os.path.exists(rec_path):
-            results['errors'].append(f"REC 파일이 존재하지 않음: {rec_path}")
-            results['valid'] = False
-            return results
-        else:
-            results['success'].append("✓ REC 파일 존재 확인")
+            return False
         
-        # 2. PAR 파일 파싱
-        header_info = parse_par_header(par_path)
-        if not header_info:
-            results['errors'].append("PAR 파일 헤더 파싱 실패")
-            results['valid'] = False
-            return results
-        else:
-            results['success'].append("✓ PAR 파일 헤더 파싱 성공")
+        # 2. REC 파일 크기 확인 (비어있지 않은지만)
+        if os.path.getsize(rec_path) == 0:
+            return False
         
-        results['info'].update(header_info)
+        # 3. PAR 파일 기본 파싱 가능 확인
+        has_image_section = False
+        image_count = 0
         
-        # 3. IMAGE INFORMATION 섹션 파싱
-        image_info = parse_image_information(par_path)
-        if not image_info:
-            results['errors'].append("IMAGE INFORMATION 섹션 파싱 실패")
-            results['valid'] = False
-            return results
-        else:
-            results['success'].append("✓ IMAGE INFORMATION 섹션 파싱 성공")
-        
-        # 4. 기본 유효성 검사들
-        check_header_validity(header_info, results)
-        check_data_completeness(header_info, image_info, results)
-        check_file_size_consistency(header_info, image_info, rec_path, results)
-        check_index_continuity(image_info, results)
-        check_metadata_consistency(image_info, results)
-        
-        # 5. 최종 결과
-        if results['errors']:
-            results['valid'] = False
-        
-        return results
-        
-    except Exception as e:
-        results['errors'].append(f"검사 중 오류 발생: {str(e)}")
-        results['valid'] = False
-        return results
-
-
-def parse_par_header(par_path):
-    """PAR 파일 헤더 정보 추출"""
-    header_info = {}
-    
-    with open(par_path, 'r', encoding='utf-8', errors='ignore') as f:
-        for line in f:
-            line = line.strip()
-            
-            # 헤더 섹션 종료 확인
-            if line.startswith("#  sl ec  dyn"):
-                break
+        with open(par_path, 'r', encoding='utf-8', errors='ignore') as f:
+            for line in f:
+                line = line.strip()
                 
-            # 주요 매개변수 추출
-            if "Scan resolution" in line:
-                match = re.search(r':\s*(\d+)\s+(\d+)', line)
-                if match:
-                    header_info['scan_resolution_x'] = int(match.group(1))
-                    header_info['scan_resolution_y'] = int(match.group(2))
-            
-            elif "Max. number of slices/locations" in line:
-                match = re.search(r':\s*(\d+)', line)
-                if match:
-                    header_info['max_slices'] = int(match.group(1))
-            
-            elif "Max. number of dynamics" in line:
-                match = re.search(r':\s*(\d+)', line)
-                if match:
-                    header_info['max_dynamics'] = int(match.group(1))
-            
-            elif "Max. number of echoes" in line:
-                match = re.search(r':\s*(\d+)', line)
-                if match:
-                    header_info['max_echoes'] = int(match.group(1))
-            
-            elif "Max. number of cardiac phases" in line:
-                match = re.search(r':\s*(\d+)', line)
-                if match:
-                    header_info['max_phases'] = int(match.group(1))
-    
-    return header_info
-
-
-def parse_image_information(par_path):
-    """IMAGE INFORMATION 섹션 파싱"""
-    image_data = []
-    
-    with open(par_path, 'r', encoding='utf-8', errors='ignore') as f:
-        in_data_section = False
+                # IMAGE INFORMATION 섹션 시작 확인
+                if line.startswith("#  sl ec  dyn"):
+                    has_image_section = True
+                    continue
+                
+                # 데이터 라인 카운트 (최소 1개 이상)
+                if has_image_section and line and not line.startswith("#"):
+                    parts = line.split()
+                    if len(parts) >= 10:  # 최소 필수 컬럼 수
+                        image_count += 1
         
-        for line in f:
-            line = line.strip()
-            
-            # 데이터 섹션 시작 확인
-            if line.startswith("#  sl ec  dyn"):
-                in_data_section = True
-                continue
-            
-            # 데이터 라인 처리
-            if in_data_section and line and not line.startswith("#"):
-                parts = line.split()
-                if len(parts) >= 10:  # 최소 필수 컬럼 수
-                    try:
-                        image_data.append({
-                            'slice': int(parts[0]),
-                            'echo': int(parts[1]),
-                            'dynamic': int(parts[2]),
-                            'phase': int(parts[3]),
-                            'type': int(parts[4]),
-                            'sequence': int(parts[5]),
-                            'index': int(parts[6]),
-                            'bit_depth': int(parts[7]),
-                            'scan_percent': int(parts[8]),
-                            'recon_x': int(parts[9]),
-                            'recon_y': int(parts[10]) if len(parts) > 10 else int(parts[9])
-                        })
-                    except (ValueError, IndexError):
-                        continue
-    
-    return image_data
-
-
-def check_header_validity(header_info, results):
-    """헤더 유효성 검사"""
-    required_fields = ['max_slices', 'max_dynamics', 'max_echoes', 'max_phases']
-    
-    header_errors = []
-    for field in required_fields:
-        if field not in header_info:
-            header_errors.append(f"필수 헤더 정보 누락: {field}")
-        elif header_info[field] <= 0:
-            header_errors.append(f"잘못된 {field} 값: {header_info[field]}")
-    
-    if header_errors:
-        results['errors'].extend(header_errors)
-    else:
-        results['success'].append("✓ 헤더 필수 정보 모두 유효")
-
-
-def check_data_completeness(header_info, image_info, results):
-    """데이터 완전성 검사"""
-    if not image_info:
-        results['errors'].append("IMAGE INFORMATION 데이터가 없음")
-        return
-    
-    # 예상 총 이미지 수
-    expected_total = (header_info.get('max_slices', 0) * 
-                     header_info.get('max_dynamics', 0) * 
-                     header_info.get('max_echoes', 1) * 
-                     header_info.get('max_phases', 1))
-    
-    actual_total = len(image_info)
-    results['info']['expected_images'] = expected_total
-    results['info']['actual_images'] = actual_total
-    
-    if actual_total != expected_total:
-        results['errors'].append(f"이미지 수 불일치: 예상 {expected_total}, 실제 {actual_total}")
-    else:
-        results['success'].append(f"✓ 이미지 수 일치: {actual_total}개")
-    
-    # 각 차원별 범위 확인
-    slices = set(img['slice'] for img in image_info)
-    dynamics = set(img['dynamic'] for img in image_info)
-    echoes = set(img['echo'] for img in image_info)
-    phases = set(img['phase'] for img in image_info)
-    
-    results['info']['slice_range'] = f"{min(slices)}-{max(slices)} ({len(slices)}개)"
-    results['info']['dynamic_range'] = f"{min(dynamics)}-{max(dynamics)} ({len(dynamics)}개)"
-    
-    # 누락된 조합 확인
-    expected_combinations = set()
-    for s in range(1, header_info.get('max_slices', 0) + 1):
-        for d in range(1, header_info.get('max_dynamics', 0) + 1):
-            for e in range(1, header_info.get('max_echoes', 1) + 1):
-                for p in range(1, header_info.get('max_phases', 1) + 1):
-                    expected_combinations.add((s, d, e, p))
-    
-    actual_combinations = set((img['slice'], img['dynamic'], img['echo'], img['phase']) 
-                             for img in image_info)
-    
-    missing = expected_combinations - actual_combinations
-    if missing:
-        results['warnings'].append(f"누락된 이미지 조합 {len(missing)}개")
-    else:
-        results['success'].append("✓ 모든 슬라이스-다이나믹스 조합 완전")
-
-
-def check_file_size_consistency(header_info, image_info, rec_path, results):
-    """파일 크기 일관성 검사"""
-    if not image_info:
-        return
-    
-    # 첫 번째 이미지에서 매개변수 추출
-    first_img = image_info[0]
-    bit_depth = first_img['bit_depth']
-    recon_x = first_img['recon_x']
-    recon_y = first_img['recon_y']
-    
-    # 예상 REC 파일 크기 계산
-    bytes_per_pixel = bit_depth // 8
-    total_images = len(image_info)
-    expected_size = recon_x * recon_y * total_images * bytes_per_pixel
-    
-    # 실제 파일 크기
-    actual_size = os.path.getsize(rec_path)
-    
-    results['info']['expected_rec_size'] = expected_size
-    results['info']['actual_rec_size'] = actual_size
-    results['info']['size_match'] = actual_size == expected_size
-    
-    if actual_size != expected_size:
-        results['errors'].append(f"REC 파일 크기 불일치: 예상 {expected_size}, 실제 {actual_size}")
-    else:
-        results['success'].append(f"✓ REC 파일 크기 일치: {actual_size:,} bytes")
-
-
-def check_index_continuity(image_info, results):
-    """인덱스 연속성 검사"""
-    indices = [img['index'] for img in image_info]
-    indices.sort()
-    
-    expected_indices = list(range(len(image_info)))
-    
-    if indices != expected_indices:
-        results['warnings'].append("인덱스가 연속적이지 않음")
-    else:
-        results['success'].append("✓ 인덱스 연속성 확인")
-    
-    results['info']['index_range'] = f"{min(indices)}-{max(indices)}"
-
-
-def check_metadata_consistency(image_info, results):
-    """메타데이터 일관성 검사"""
-    if not image_info:
-        return
-    
-    # 모든 이미지가 같은 속성을 가져야 하는 필드들
-    consistent_fields = ['bit_depth', 'recon_x', 'recon_y']
-    
-    inconsistent_fields = []
-    for field in consistent_fields:
-        values = set(img[field] for img in image_info)
-        if len(values) > 1:
-            inconsistent_fields.append(f"{field} 값이 일관되지 않음: {values}")
-        else:
-            results['info'][f'{field}_value'] = list(values)[0]
-    
-    if inconsistent_fields:
-        results['warnings'].extend(inconsistent_fields)
-    else:
-        results['success'].append("✓ 모든 이미지 메타데이터 일관성 확인")
+        # 4. 최소 요구사항 확인
+        if not has_image_section:
+            return False
+        
+        if image_count == 0:
+            return False
+        
+        # 모든 필수 검증 통과
+        return True
+        
+    except Exception:
+        return False
 
 
 def validate_nifti_file(nifti_path):
@@ -538,10 +307,9 @@ class ParrecValidator:
                 logger.error(f"Missing PAR/REC pair for stem '{stem}'")
                 continue
 
-            # 개별 페어 단위로 유효성 검사
-            res = validate_parrec_files(str(par_file))
-            if not res.get('valid'):
-                logger.error(f"✗ PAR/REC validation failed: {par_file.name} / {rec_file.name}")
+            # 최소 유효성 검사
+            if not validate_parrec_files(str(par_file)):
+                logger.error(f"Invalid PAR/REC: {par_file.name} / {rec_file.name}")
                 continue
 
             set_id = "set-" + _sha1(f"{par_file.name}|{rec_file.name}")
@@ -555,7 +323,7 @@ class ParrecValidator:
                 except OSError:
                     shutil.move(str(src), str(dst))
 
-            logger.info(f"[PAR/REC] Validation pair → {target_dir} ({par_file.name}, {rec_file.name})")
+            logger.info(f"[PAR/REC] Valid pair → {target_dir}")
             results.append((str(target_dir), set_id))
 
         if not results:
@@ -563,7 +331,6 @@ class ParrecValidator:
             return None
         return results
     
-
 
 
 class NiftiValidator:

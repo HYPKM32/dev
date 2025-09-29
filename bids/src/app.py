@@ -8,7 +8,7 @@ import logging
 import process.main  
 from globals import (
     EVENT_DIR, WORKING_DIR, UPLOAD_DIR, BACKUP_DIR, ERROR_DIR, 
-    MAX_WORKERS, LOG_FILENAME,
+    MAX_WORKERS, LOG_FILENAME, MAGNETIC_STRENGTH_FIELD,
     DICOM_MODALITY, NIFTI_MODALITY, PARREC_MODALITY, SUFFIX_MAP,
     FLAG_DIR, DEFACING_FLAG, CANONICAL_FLAG, CIVET_FLAG
 )
@@ -37,6 +37,7 @@ class JSONFileMonitor:
         self.backup_dir = BACKUP_DIR
         self.error_dir = ERROR_DIR
         self.max_workers = MAX_WORKERS
+        self.magnetic_strength_field = MAGNETIC_STRENGTH_FIELD
         # Modality paths
         self.dicom_modality = DICOM_MODALITY
         self.nifti_modality = NIFTI_MODALITY
@@ -134,11 +135,9 @@ class JSONFileMonitor:
                 parrec_modality=self.parrec_modality,
                 suffix_map = self.suffix_map,
                 flag_dir=self.flag_dir,
+                magnetic_strength_field = self.magnetic_strength_field
             )
             logger.info(f"Successfully processed: {file_name}")
-            
-            # 처리 완료 후 backup 디렉토리로 이동
-            self.move_file_to_backup(working_file_path)
                 
         except Exception as e:
             error_msg = f"Error processing {file_name}: {e}"
@@ -151,24 +150,6 @@ class JSONFileMonitor:
         finally:
             # 처리 완료된 파일을 추적 목록에서 제거 (재처리 가능하게)
             self.processed_files.discard(file_name)
-    
-    def move_file_to_backup(self, working_file_path):
-        """처리된 파일을 backup 디렉토리로 이동"""
-        try:
-            file_name = os.path.basename(working_file_path)
-            backup_destination = os.path.join(self.backup_dir, file_name)
-            
-            # 같은 이름의 파일이 있으면 타임스탬프 추가
-            if os.path.exists(backup_destination):
-                timestamp = time.strftime("%Y%m%d_%H%M%S")
-                name, ext = os.path.splitext(file_name)
-                backup_destination = os.path.join(self.backup_dir, f"{name}_{timestamp}{ext}")
-            
-            shutil.move(working_file_path, backup_destination)
-            logger.info(f"Moved processed file to backup: {file_name}")
-            
-        except Exception as e:
-            logger.error(f"Error moving file to backup {working_file_path}: {e}")
     
     def monitor_loop(self):
         """5초마다 EVENT_DIR을 체크하는 메인 루프"""

@@ -1,15 +1,15 @@
 {
   "anat": {
-    "FLAIR": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
-    "PDT2": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
-    "PDw": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
-    "T1w": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
-    "T2starw": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
-    "T2w": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
-    "UNIT1": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
-    "angio": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
-    "inplaneT1": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
-    "inplaneT2": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
+    "FLAIR": {"subject": "label", "session": "label", "run": "index"},
+    "PDT2": {"subject": "label", "session": "label", "run": "index"},
+    "PDw": {"subject": "label", "session": "label", "run": "index"},
+    "T1w": {"subject": "label", "session": "label", "run": "index"},
+    "T2starw": {"subject": "label", "session": "label", "run": "index"},
+    "T2w": {"subject": "label", "session": "label", "run": "index"},
+    "UNIT1": {"subject": "label", "session": "label", "run": "index"},
+    "angio": {"subject": "label", "session": "label", "run": "index"},
+    "inplaneT1": {"subject": "label", "session": "label", "run": "index"},
+    "inplaneT2": {"subject": "label", "session": "label", "run": "index"},
     "Chimap": {"subject": "label", "session": "label", "run": "index"},
     "M0map": {"subject": "label", "session": "label", "run": "index"},
     "MTRmap": {"subject": "label", "session": "label", "run": "index"},
@@ -29,8 +29,8 @@
     "TB1map": {"subject": "label", "session": "label", "run": "index"}
   },
   "dwi": {
-    "dwi": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
-    "sbref": {"subject": "label", "session": "label", "acq": "label", "run": "index"}
+    "dwi": {"subject": "label", "session": "label", "run": "index"},
+    "sbref": {"subject": "label", "session": "label", "run": "index"}
   },
   "func": {
     "bold": {"subject": "label", "session": "label", "task": "label", "run": "index"},
@@ -52,8 +52,7 @@
     "phasediff": {"subject": "label", "session": "label", "run": "index"}
   },
   "ct": {
-    "ct": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
-    "cr": {"subject": "label", "session": "label", "acq": "label", "run": "index"},
-    "dx": {"subject": "label", "session": "label", "acq": "label", "run": "index"}
+    "CR": {"subject": "label", "session": "label", "run": "index"},
+    "DX": {"subject": "label", "session": "label", "run": "index"}
   }
 }

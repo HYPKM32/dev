@@ -2,21 +2,21 @@
   "T1w": [
     {
       "Technique": [
-        "T1"
+        "T1TFE"
       ]
     }
   ],
   "FLAIR": [
     {
       "ProtocolName": [
-        "FLAIR"
+        "3D Brain View FLAIR SAG"
       ]
     }
   ],
   "dwi": [
     {
-      "Technique": [
-        "Dwi"
+      "ProtocolName": [
+        "DTI 32DIR"
       ]
     }
   ],

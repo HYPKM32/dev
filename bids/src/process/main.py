@@ -201,7 +201,7 @@ def process_flags(structured_config, paths):
 
 def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, working_dir=None,
          dicom_modality=None, nifti_modality=None, parrec_modality=None, suffix_map=None,
-         flag_dir=None):
+         flag_dir=None, magnetic_strength_field = None):
     """JSON 파일을 처리하는 메인 함수"""
     global global_vars
     
@@ -218,7 +218,8 @@ def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, worki
         'nifti_modality': nifti_modality,
         'parrec_modality': parrec_modality,
         'suffix_map': suffix_map,
-        'flag_dir': flag_dir
+        'flag_dir': flag_dir,
+        'magnetic_strength_field': magnetic_strength_field 
     }
     
     logger.info(f"JSON 파일 처리 시작: {json_file_path}")
@@ -264,6 +265,8 @@ def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, worki
                 # MRI 또는 DATA 도메인인 경우 MRI 모듈 사용
                 from process.components.domain.mri.source import source as mri_source
                 from process.components.domain.mri.raw import raw as mri_raw
+                from process.components.domain.mri.post import bids_checker as mri_checker
+                from process.components.domain.mri.post import byproduct as mri_byproduct
                 from process.components.domain.mri.post import thumbnail as mri_thumbnail
                 # source_path로 받아서 개별 변수로 저장
                 source_path = mri_source.create_source_path(structured_config, mss_path, origin_unzip_path)
@@ -275,10 +278,40 @@ def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, worki
                 paths = update_paths_after_step(paths,"step4_raw",
                             raw_path=raw_path)
                 
-                logger.info(f"Step 5-1: Domain '{domain}' 후처리: Thumbnail 생성")
+                logger.info(f"Step 5-1: Domain '{domain}' 후처리: BIDS modality Checker")
+                bids_checklist = mri_checker.check_modality(raw_path)
+                paths = update_paths_after_step(paths,"step5_checklist",
+                            bids_checklist=bids_checklist)
+                
+                logger.info(f"Step 5-2: Domain '{domain}' 후처리: BIDS mdality Byproduct Checker")
+                byproduct_path = mri_byproduct.check_byproduct(raw_path)
+                
+                
+                logger.info(f"Step 5-3: Domain '{domain}' 후처리: Thumbnail 생성")
                 thumbnail_path = mri_thumbnail.thumbnail(raw_path)
-                paths = update_paths_after_step(paths, "step5_thumbnail",
-                            thumbnail_path=thumbnail_path)
+                
+                raw_to_source = {}
+                for source_key, raw_key in raw_path.items():
+                    raw_to_source[raw_key] = source_key
+
+                
+                for nifti_key in bids_checklist.keys():
+                    # byproduct 추가
+                    if nifti_key in byproduct_path:
+                        bids_checklist[nifti_key]['byproduct'] = byproduct_path[nifti_key]
+                    
+                    # thumbnail 추가
+                    if nifti_key in thumbnail_path:
+                        bids_checklist[nifti_key]['thumbnail'] = thumbnail_path[nifti_key]
+                    
+                    # source 추가
+                    if nifti_key in raw_to_source:
+                        bids_checklist[nifti_key]['source'] = raw_to_source[nifti_key]
+
+                # 통합된 checklist만 paths에 업데이트
+                paths = update_paths_after_step(paths, "step5_checklist",
+                            bids_checklist=bids_checklist)
+
                 print(f"MRI 도메인 source 처리 완료 (Domain: {domain})")
                 
             elif domain == "PET":
@@ -303,25 +336,10 @@ def main(json_file_path, upload_dir=None, backup_dir=None, error_dir=None, worki
         
        
         # Step 6: Export JSON 생성 (export.py에서 처리)
-        #export_path = export.create_export(structured_config, paths)
-        
-        # Step 6 완료 후 경로 정리
-        #paths = update_paths_after_step(paths, "step6_export",
-        #                              export_path=export_path)
-        
-        # Step 7: Process flags (조건부)
-        #process_flags(structured_config, paths)
-        
-        # 최종 경로 정보 출력
-        print("\n=== 최종 경로 정보 요약 ===")
-        for step, step_paths in paths.items():
-            print(f"{step}:")
-            for path_name, path_value in step_paths.items():
-                print(f"  {path_name}: {path_value}")
-        
-        logger.info("모든 처리 단계가 성공적으로 완료됨")
-        return paths
+        export.create_export(config,global_vars, paths)
+
+        logger.info("BIDS Converting has done")
         
     except Exception as e:
-        logger.error(f"처리 실패: {e}")
+        logger.error(f"Fail: {e}")
         raise
